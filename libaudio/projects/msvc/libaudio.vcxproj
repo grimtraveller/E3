@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BBFF8186-319F-4EB8-98F5-BA995CBBF2D2}</ProjectGuid>
+    <RootNamespace>libaudio</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>libaudiod</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetExt>.lib</TargetExt>
+    <IncludePath>D:\Dev\C++\Lib\boost\boost_1_49_0;D:\Dev\C++\Lib\rtaudio-4.0.11;D:\Dev\C++\Lib\portaudio-19.0\include;D:\Dev\C++\Lib\E3\libcommon\include;D:\Dev\C++\Lib\libsndfile-1.0.25\msvc;D:\Dev\C++\Lib\portsf\src;D:\Dev\C++\Lib\libsamplerate-0.1.8\src;D:\Dev\C++\Lib\E3\libaudio\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Dev\C++\Lib\boost\boost_1_49_0\lib\i386;D:\Dev\C++\Lib\E3\libcommon\lib;$(LibraryPath)</LibraryPath>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>libaudio</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetExt>.lib</TargetExt>
+    <IncludePath>D:\Dev\C++\Lib\boost\boost_1_49_0;D:\Dev\C++\Lib\rtaudio-4.0.11;D:\Dev\C++\Lib\portaudio-19.0\include;D:\Dev\C++\Lib\E3\libcommon\include;D:\Dev\C++\Lib\libsndfile-1.0.25\msvc;D:\Dev\C++\Lib\portsf\src;D:\Dev\C++\Lib\libsamplerate-0.1.8\src;D:\Dev\C++\Lib\E3\libaudio\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Dev\C++\Lib\boost\boost_1_49_0\lib\i386;D:\Dev\C++\Lib\E3\libcommon\lib;$(LibraryPath)</LibraryPath>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetFileName)" "$(ProjectDir)..\..\lib\libaudiod.lib"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetFileName)" "$(ProjectDir)..\..\lib\libaudio.lib"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\core\AudioBridge.cpp" />
+    <ClCompile Include="..\..\src\core\AudioBuffer.cpp" />
+    <ClCompile Include="..\..\src\core\AudioDevice.cpp" />
+    <ClCompile Include="..\..\src\core\AudioFactory.cpp" />
+    <ClCompile Include="..\..\src\core\AudioFile.cpp" />
+    <ClCompile Include="..\..\src\core\CPUProfiler.cpp" />
+    <ClCompile Include="..\..\src\wrapper\LibSndFile.cpp" />
+    <ClCompile Include="..\..\src\wrapper\PortAudioBridge.cpp" />
+    <ClCompile Include="..\..\src\wrapper\PortSfFile.cpp" />
+    <ClCompile Include="..\..\src\wrapper\RtAudioBridge.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\core\AudioBridge.h" />
+    <ClInclude Include="..\..\include\core\AudioBuffer.h" />
+    <ClInclude Include="..\..\include\core\AudioDevice.h" />
+    <ClInclude Include="..\..\include\core\AudioFactory.h" />
+    <ClInclude Include="..\..\include\core\AudioFile.h" />
+    <ClInclude Include="..\..\include\core\Buffer.h" />
+    <ClInclude Include="..\..\include\core\CPUProfiler.h" />
+    <ClInclude Include="..\..\include\core\IntegerTypes.h" />
+    <ClInclude Include="..\..\include\wrapper\LibSndFile.h" />
+    <ClInclude Include="..\..\include\wrapper\PortAudioBridge.h" />
+    <ClInclude Include="..\..\include\wrapper\PortSfFile.h" />
+    <ClInclude Include="..\..\include\wrapper\RtAudioBridge.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

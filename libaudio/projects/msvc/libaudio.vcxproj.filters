@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Quelldateien">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;h</Extensions>
+    </Filter>
+    <Filter Include="Quelldateien\core">
+      <UniqueIdentifier>{a1529c41-71ae-4cb5-ad2e-5d2d24ef3945}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;h</Extensions>
+    </Filter>
+    <Filter Include="Quelldateien\wrapper">
+      <UniqueIdentifier>{901bec46-637a-4125-98e3-64c794cb2701}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;h</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\core\AudioBridge.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\CPUProfiler.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\AudioBuffer.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\AudioDevice.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\AudioFactory.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\AudioFile.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wrapper\LibSndFile.cpp">
+      <Filter>Quelldateien\wrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wrapper\PortAudioBridge.cpp">
+      <Filter>Quelldateien\wrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wrapper\PortSfFile.cpp">
+      <Filter>Quelldateien\wrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wrapper\RtAudioBridge.cpp">
+      <Filter>Quelldateien\wrapper</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\core\AudioBridge.h">
+      <Filter>Quelldateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\AudioBuffer.h">
+      <Filter>Quelldateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\AudioDevice.h">
+      <Filter>Quelldateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\AudioFactory.h">
+      <Filter>Quelldateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\AudioFile.h">
+      <Filter>Quelldateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\Buffer.h">
+      <Filter>Quelldateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\CPUProfiler.h">
+      <Filter>Quelldateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\IntegerTypes.h">
+      <Filter>Quelldateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wrapper\LibSndFile.h">
+      <Filter>Quelldateien\wrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wrapper\PortAudioBridge.h">
+      <Filter>Quelldateien\wrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wrapper\PortSfFile.h">
+      <Filter>Quelldateien\wrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wrapper\RtAudioBridge.h">
+      <Filter>Quelldateien\wrapper</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
