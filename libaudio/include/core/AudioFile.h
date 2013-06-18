@@ -1,5 +1,13 @@
 
+//---------------------------------------------------
+// Wrapper for linsndfile
+//
+// http://mega-nerd.com/libsndfile/api.html
+//---------------------------------------------------
+
 #pragma once
+
+#include <sndfile.h>  // libsndfile
 
 #include <vector>
 #include <boost/unordered_map.hpp>
@@ -18,71 +26,70 @@ class AudioBuffer;
 class AudioFile
 {
 public:
-	enum Format
-	{	
-        FMT_UNKNOWN  = -1,
-		FMT_WAV		 = 1,			// Microsoft WAV format (little endian default). 
-		FMT_AIFF	 = 2,			// Apple/SGI AIFF format (big endian). 
-        FMT_AIFC     = 3,
-		FMT_AU		 = 4,			// Sun/NeXT AU format (big endian). 
-		FMT_RAW		 = 5,			// RAW PCM data. 
-		FMT_PAF		 = 6,			// Ensoniq PARIS file format. 
-		FMT_SVX		 = 7,			// Amiga IFF / SVX8 / SV16 format. 
-		FMT_NIST	 = 8,			// Sphere NIST format. 
-		FMT_VOC		 = 9,			// VOC files. 
-		FMT_IRCAM	 = 10,			// Berkeley/IRCAM/CARL 
-		FMT_W64		 = 11,			// Sonic Foundry's 64 bit RIFF/WAV 
-		FMT_MAT4	 = 12,			// Matlab (tm) V4.2 / GNU Octave 2.0 
-		FMT_MAT5	 = 13,			// Matlab (tm) V5.0 / GNU Octave 2.1 
-		FMT_PVF		 = 14,			// Portable Voice Format 
-		FMT_XI		 = 15,			// Fasttracker 2 Extended Instrument 
-		FMT_HTK		 = 16,			// HMM Tool Kit format 
-		FMT_SDS		 = 17,			// Midi Sample Dump Standard 
-		FMT_AVR		 = 18,			// Audio Visual Research 
-		FMT_WAVEX	 = 19,			// MS WAVE with WAVEFORMATEX 
-		FMT_SD2		 = 20,			// Sound Designer 2 
-		FMT_FLAC	 = 21,			// FLAC lossless file format 
-		FMT_CAF		 = 22,			// Core Audio File format 
-		FMT_WVE		 = 23,			// Psion WVE format 
-		FMT_OGG		 = 24,			// Xiph OGG container 
-		FMT_MPC2K	 = 25,			// Akai MPC 2000 sampler 
-		FMT_RF64	 = 26,			// RF64 WAV file 
-	};
-
-    enum Encoding 
+    enum Format
     {
-        ENC_UNKNOWN       = -1,
-        ENC_PCM_S8		  = 1,			// Signed 8 bit data 
-		ENC_PCM_16		  = 2,			// Signed 16 bit data 
-		ENC_PCM_24		  = 3,			// Signed 24 bit data 
-		ENC_PCM_32		  = 4,			// Signed 32 bit data 
+        FMT_UNKNOWN = -1,
+	    FMT_WAV     = SF_FORMAT_WAV,      // Microsoft WAV format (little endian default).
+	    FMT_AIFF    = SF_FORMAT_AIFF,     // Apple/SGI AIFF format (big endian). 
+	    FMT_AU      = SF_FORMAT_AU,       // Sun/NeXT AU format (big endian). 
+	    FMT_RAW     = SF_FORMAT_RAW,      // RAW PCM data. 
+	    FMT_PAF     = SF_FORMAT_PAF,      // Ensoniq PARIS file format. 
+	    FMT_SVX     = SF_FORMAT_SVX,      // Amiga IFF / SVX8 / SV16 format. 
+	    FMT_NIST    = SF_FORMAT_NIST,     // Sphere NIST format. 
+	    FMT_VOC     = SF_FORMAT_VOC,      // VOC files. 
+	    FMT_IRCAM   = SF_FORMAT_IRCAM,    // Berkeley/IRCAM/CARL 
+	    FMT_W64     = SF_FORMAT_W64,      // Sonic Foundry's 64 bit RIFF/WAV 
+	    FMT_MAT4    = SF_FORMAT_MAT4,     // Matlab (tm) V4.2 / GNU Octave 2.0 
+	    FMT_MAT5    = SF_FORMAT_MAT5,     // Matlab (tm) V5.0 / GNU Octave 2.1 
+	    FMT_PVF     = SF_FORMAT_PVF,      // Portable Voice Format 
+	    FMT_XI      = SF_FORMAT_XI,       // Fasttracker 2 Extended Instrument 
+	    FMT_HTK     = SF_FORMAT_HTK,      // HMM Tool Kit format 
+	    FMT_SDS     = SF_FORMAT_SDS,      // Midi Sample Dump Standard 
+	    FMT_AVR     = SF_FORMAT_AVR,      // Audio Visual Research 
+	    FMT_WAVEX   = SF_FORMAT_WAVEX,    // MS WAVE with WAVEFORMATEX 
+	    FMT_SD2     = SF_FORMAT_SD2,      // Sound Designer 2 
+	    FMT_FLAC    = SF_FORMAT_FLAC,     // FLAC lossless file format 
+	    FMT_CAF     = SF_FORMAT_CAF,      // Core Audio File format 
+	    FMT_WVE     = SF_FORMAT_WVE,      // Psion WVE format 
+	    FMT_OGG     = SF_FORMAT_OGG,      // Xiph OGG container 
+	    FMT_MPC2K   = SF_FORMAT_MPC2K,    // Akai MPC 2000 sampler 
+	    FMT_RF64    = SF_FORMAT_RF64,     // RF64 WAV file 
+    };
 
-        ENC_PCM_U8		  = 5,			// Unsigned 8 bit data (WAV and RAW only) 
+    enum Encoding
+    {
+	    ENC_UNKNOWN     = -1,
+        ENC_PCM_S8      = SF_FORMAT_PCM_S8,      // Signed 8 bit data 
+	    ENC_PCM_16      = SF_FORMAT_PCM_16,      // Signed 16 bit data
+	    ENC_PCM_24      = SF_FORMAT_PCM_24,      // Signed 24 bit data
+	    ENC_PCM_32      = SF_FORMAT_PCM_32,      // Signed 32 bit data
 
-        ENC_FLOAT		  = 6,			// 32 bit float data 
-		ENC_DOUBLE		  = 7,			// 64 bit float data 
+        ENC_PCM_U8      = SF_FORMAT_PCM_U8,      // Unsigned 8 bit data (WAV and RAW only) 
 
-        ENC_ULAW		  = 8,			// U-Law encoded. 
-		ENC_ALAW		  = 9,			// A-Law encoded. 
-		ENC_IMA_ADPCM	  = 10,			// IMA ADPCM. 
-		ENC_MS_ADPCM	  = 11,			// Microsoft ADPCM. 
+        ENC_FLOAT       = SF_FORMAT_FLOAT,       // 32 bit float data 
+	    ENC_DOUBLE      = SF_FORMAT_DOUBLE,      // 64 bit float data 
 
-        ENC_GSM610		  = 12,			// GSM 6.10 encoding. 
-		ENC_VOX_ADPCM	  = 13,		    // OKI / Dialogix ADPCM 
+        ENC_ULAW        = SF_FORMAT_ULAW,        // U-Law encoded. 
+	    ENC_ALAW 	    = SF_FORMAT_ALAW,        // A-Law encoded. 
+	    ENC_IMA_ADPCM   = SF_FORMAT_IMA_ADPCM,   // IMA ADPCM. 
+	    ENC_MS_ADPCM    = SF_FORMAT_MS_ADPCM,    // Microsoft ADPCM
 
-        ENC_G721_32		  = 14,			// 32kbs G721 ADPCM encoding. 
-		ENC_G723_24		  = 15,			// 24kbs G723 ADPCM encoding. 
-		ENC_G723_40		  = 16,			// 40kbs G723 ADPCM encoding. 
+        ENC_GSM610      = SF_FORMAT_GSM610,      // GSM 6.10 encoding. 
+	    ENC_VOX_ADPCM   = SF_FORMAT_VOX_ADPCM,   // OKI / Dialogix ADPCM 
 
-        ENC_DWVW_12		  = 17, 		// 12 bit Delta Width Variable Word encoding. 
-		ENC_DWVW_16		  = 18, 		// 16 bit Delta Width Variable Word encoding. 
-		ENC_DWVW_24		  = 19, 		// 24 bit Delta Width Variable Word encoding. 
-		ENC_DWVW_N		  = 20, 		// N bit Delta Width Variable Word encoding. 
+        ENC_G721_32     = SF_FORMAT_G721_32,     // 32kbs G721 ADPCM encoding
+	    ENC_G723_24     = SF_FORMAT_G723_24, 	 // 24kbs G723 ADPCM encoding
+	    ENC_G723_40     = SF_FORMAT_G723_40, 	 // 40kbs G723 ADPCM encoding
 
-        ENC_DPCM_8		  = 21,			// 8 bit differential PCM (XI only) 
-		ENC_DPCM_16		  = 22,			// 16 bit differential PCM (XI only) 
+        ENC_DWVW_12     = SF_FORMAT_DWVW_12,	 // 12 bit Delta Width Variable Word encoding
+	    ENC_DWVW_16     = SF_FORMAT_DWVW_16, 	 // 16 bit Delta Width Variable Word encoding
+	    ENC_DWVW_24     = SF_FORMAT_DWVW_24, 	 // 24 bit Delta Width Variable Word encoding
+	    ENC_DWVW_N      = SF_FORMAT_DWVW_N, 	 // N bit Delta Width Variable Word encoding
 
-        ENC_VORBIS		  = 23,			// Xiph Vorbis encoding. 
+        ENC_DPCM_8      = SF_FORMAT_DPCM_8, 	 // 8 bit differential PCM (XI only) 
+	    ENC_DPCM_16     = SF_FORMAT_DPCM_16,     // 16 bit differential PCM (XI only) 
+
+        ENC_VORBIS      = SF_FORMAT_VORBIS,      // Xiph Vorbis encoding. 
     };
 
     enum FileOpenMode 
@@ -98,10 +105,10 @@ public:
     public:
         enum LoopMode 
         {
-            LoopNone        = 800,
-            LoopForward     = 1,
-            LoopBackward    = 2,
-            LoopAlternating = 3
+            LoopNone        = SF_LOOP_NONE,
+            LoopForward     = SF_LOOP_FORWARD,
+            LoopBackward    = SF_LOOP_BACKWARD,
+            LoopAlternating = SF_LOOP_ALTERNATING
         };
 
         struct LoopData
@@ -168,32 +175,32 @@ typedef boost::filesystem::path Path;
 
 public:
     AudioFile();
-    virtual ~AudioFile();
+    ~AudioFile();
 
-    virtual void open(const Path& filename, FileOpenMode mode);
-    virtual void load(AudioBuffer* buffer);
-    virtual void store(const AudioBuffer* buffer);
-    virtual void close() {};
-	virtual int64 seek(int64 frame) = 0;
+    void open(const Path& filename, FileOpenMode mode);
+    void load(AudioBuffer* buffer);
+    void store(const AudioBuffer* buffer);
+    void close();
+	int64 seek(int64 frame);
     
-    virtual int64 readShort(short* buffer, int64 num)    = 0;
-    virtual int64 readInt(int* buffer, int64 num)        = 0;
-    virtual int64 readFloat(float* buffer, int64 num)    = 0;
-    virtual int64 readDouble(double* buffer, int64 num)  = 0;
+    int64 readShort(short* buffer, int64 num)       { return sf_read_short(handle_, buffer, num); }
+    int64 readInt(int* buffer, int64 num)           { return sf_read_int(handle_, buffer, num); }
+    int64 readFloat(float* buffer, int64 num)       { return sf_read_float(handle_, buffer, num); }
+    int64 readDouble(double* buffer, int64 num)     { return sf_read_double(handle_, buffer, num); }
 
-    virtual int64 writeShort(short* buffer, int64 num)   = 0;
-    virtual int64 writeInt(int* buffer, int64 num)       = 0;
-    virtual int64 writeFloat(float* buffer, int64 num)   = 0;
-    virtual int64 writeDouble(double* buffer, int64 num) = 0;
+    int64 writeShort(short* buffer, int64 num)      { return sf_write_short(handle_, buffer, num); }
+    int64 writeInt(int* buffer, int64 num)          { return sf_write_int(handle_, buffer, num); }
+    int64 writeFloat(float* buffer, int64 num)      { return sf_write_float(handle_, buffer, num); }
+    int64 writeDouble(double* buffer, int64 num)    { return sf_write_double(handle_, buffer, num); }
 
-    virtual bool isOpen() const = 0;
-    virtual bool hasError() const = 0;
-    virtual bool isReadable() const         { return isOpen() && (fileOpenMode_ == OpenRead  || fileOpenMode_ == OpenRdwr); }
-    virtual bool isWriteable() const        { return isOpen() && (fileOpenMode_ == OpenWrite || fileOpenMode_ == OpenRdwr); }
-    virtual bool checkFormat() const        { return true; }
+    bool isOpen() const                     { return handle_ != NULL; }
+    bool hasError() const                   { return sf_error(handle_) != SF_ERR_NO_ERROR; }
+    bool isReadable() const                 { return isOpen() && (fileOpenMode_ == OpenRead  || fileOpenMode_ == OpenRdwr); }
+    bool isWriteable() const                { return isOpen() && (fileOpenMode_ == OpenWrite || fileOpenMode_ == OpenRdwr); }
+    bool checkFormat() const;
 
-    virtual std::string getErrorString() const = 0;
-    virtual std::string getVersionString() const { return "unknown"; }
+    std::string getErrorString()            { return sf_strerror(handle_); }
+    std::string getVersionString() const;
     
     const Path& getFilename() const         { return filename_; }
     void setFilename(const Path& filename)  { filename_ = filename; }  
@@ -213,7 +220,7 @@ public:
     float getDurationSec() const			{ return (float)numFrames_ / (float)sampleRate_; }
     float getDurationMs() const				{ return (float)numFrames_ / (float)sampleRate_ / 1000; }
 
-	virtual InstrumentChunk& getInstrumentChunk() { return instrumentChunk_; }
+	virtual InstrumentChunk& getInstrumentChunk()   { return instrumentChunk_; }
 
     typedef EnumNames<Format> FormatNames;
     static const FormatNames& getFormatNames()      { return formatNames_s; }
@@ -222,8 +229,9 @@ public:
     static const EncodingNames& getEncodingNames()  { return encodingNames_s; }
 
 protected:
-    virtual void loadInstrumentChunk() = 0;
-    virtual void storeInstrumentChunk() = 0;
+    int packFormat() const      { return format_ | encoding_; }
+    void loadInstrumentChunk();
+    void storeInstrumentChunk();
 
     int sampleRate_;
     int numChannels_;
@@ -232,6 +240,7 @@ protected:
 
     Path filename_;
     FileOpenMode fileOpenMode_;
+    SNDFILE* handle_;
 
     Format format_;
     Encoding encoding_;

@@ -1,18 +1,6 @@
 
+#include <sstream>
 #include <boost/assign/list_of.hpp>
-
-
-#ifndef AUDIOFILE_LIB
-    #define AUDIOFILE_LIB SNDFILE
-#endif
-
-#if AUDIOFILE_LIB == SNDFILE
-    #include <wrapper/LibSndFile.h>
-    typedef LibSndFile AudioLibBridge;
-#elif AUDIOFILE_LIB == PORTSF
-    #include <wrapper/PortSfFile.h>
-    typedef PortSfFile AudioLibBridge;
-#endif
 
 #include <core/AudioBuffer.h>
 #include <core/AudioFile.h>
@@ -27,6 +15,7 @@ AudioFile::AudioFile() :
     numChannels_(2),
 	numSections_(1),
     numFrames_(0),
+    handle_(NULL),
     fileOpenMode_(OpenRead),
     format_(FMT_UNKNOWN),
     encoding_(ENC_UNKNOWN),
@@ -47,8 +36,47 @@ void AudioFile::open(const Path& filename, FileOpenMode mode)
     filename_     = filename;
     fileOpenMode_ = mode;
     ASSERT(filename_.empty() == false);
+
+    SF_INFO sfInfo;
+    memset(&sfInfo, 0, sizeof(sfInfo));
+
+    sfInfo.format     = packFormat();
+    sfInfo.samplerate = sampleRate_;
+    sfInfo.channels   = numChannels_;
+
+    switch(mode) 
+    {
+    case OpenRead:  handle_ = sf_open(filename_.string().c_str(), SFM_READ, &sfInfo);  break;
+    case OpenWrite: handle_ = sf_open(filename_.string().c_str(), SFM_WRITE, &sfInfo); break;
+    case OpenRdwr:  handle_ = sf_open(filename_.string().c_str(), SFM_READ, &sfInfo);  break;
+    default: ASSERT(false); break;
+    }
+
+    if(handle_ != NULL)
+    {
+        format_      = static_cast<Format>(sfInfo.format & SF_FORMAT_TYPEMASK);
+        encoding_    = static_cast<Encoding>(sfInfo.format & SF_FORMAT_SUBMASK);
+        sampleRate_  = sfInfo.samplerate;
+        numFrames_   = sfInfo.frames;
+        numChannels_ = sfInfo.channels;
+        numSections_ = sfInfo.sections;
+        seekable_    = sfInfo.seekable == 1;
+    }
+    else {
+        std::ostringstream os;
+        os << sf_strerror(handle_) << " (" << filename_.string().c_str() << ") ";
+        EXCEPTION(std::exception, os.str().c_str());
+    }
 }
 
+
+void AudioFile::close()
+{
+    if(handle_) {
+        int result = sf_close(handle_);
+        handle_ = NULL;
+    }
+}
 
 
 void AudioFile::load(AudioBuffer* buffer)
@@ -107,6 +135,107 @@ void AudioFile::store(const AudioBuffer* buffer)
 }
 
 
+
+int64 AudioFile::seek(int64 frame)
+{
+    sf_count_t pos = sf_seek(handle_, frame, SEEK_SET);
+
+    ASSERT(pos == frame);
+    return pos;
+}
+
+
+
+bool AudioFile::checkFormat() const
+{
+    SF_INFO sfInfo;
+    memset(&sfInfo, 0, sizeof(sfInfo));
+
+    sfInfo.format     = packFormat();
+    sfInfo.samplerate = sampleRate_;
+    sfInfo.channels   = numChannels_;
+
+    int result = sf_format_check(&sfInfo);
+    return result != SF_FALSE;
+}
+
+
+
+std::string AudioFile::getVersionString() const
+{
+	static char buffer[256] ;
+	sf_command(NULL, SFC_GET_LIB_VERSION, buffer, sizeof(buffer)) ;
+	return buffer;
+}
+
+
+
+void AudioFile::loadInstrumentChunk()
+{
+    if(handle_ == NULL)
+        return;
+
+    SF_INSTRUMENT data;
+    int result = sf_command(handle_, SFC_GET_INSTRUMENT, &data, sizeof(data));
+
+    if(result != SF_FALSE)
+    {
+        instrumentChunk_.setGain(data.gain);
+        instrumentChunk_.setBaseNote(data.basenote);
+        instrumentChunk_.setKeyLow(data.key_lo);
+        instrumentChunk_.setKeyHigh(data.key_hi);
+        instrumentChunk_.setVelocityLow(data.velocity_lo);
+        instrumentChunk_.setVelocityHigh(data.velocity_hi);
+        instrumentChunk_.setDetune(data.detune);
+
+        instrumentChunk_.clearLoops();
+        for(int i=0; i<data.loop_count; ++i)
+        {
+            InstrumentChunk::LoopData loopData;
+
+            loopData.mode_       = static_cast<InstrumentChunk::LoopMode>(data.loops[i].mode);
+            loopData.start_      = data.loops[i].start;
+            loopData.end_        = data.loops[i].end;
+            loopData.numRepeats_ = data.loops[i].count;
+
+            instrumentChunk_.addLoop(loopData);
+        }
+    }
+};
+
+
+
+void AudioFile::storeInstrumentChunk()
+{
+    if(handle_== NULL || instrumentChunk_.hasData() == false)
+        return;
+
+    SF_INSTRUMENT data;
+
+    data.gain        = instrumentChunk_.getGain();
+    data.basenote    = instrumentChunk_.getBaseNote();
+    data.key_lo      = instrumentChunk_.getKeyLow();
+    data.key_hi      = instrumentChunk_.getKeyHigh();
+    data.velocity_lo = instrumentChunk_.getVelocityLow();
+    data.velocity_hi = instrumentChunk_.getVelocityHigh();
+    data.detune      = instrumentChunk_.getDetune();
+    data.loop_count  = instrumentChunk_.getNumLoops();
+
+    const InstrumentChunk::LoopVector& loops = instrumentChunk_.getLoops();
+    for(unsigned i=0; i<loops.size(); ++i)
+    {
+        const InstrumentChunk::LoopData& loop = loops[i];
+
+        data.loops[i].mode   = loop.mode_;
+        data.loops[i].start  = loop.start_;
+        data.loops[i].end    = loop.end_;
+        data.loops[i].count  = loop.numRepeats_;
+    }
+    int result = sf_command(handle_, SFC_SET_INSTRUMENT, &data, sizeof(data));
+}
+
+
+
 //------------------------------------------------------------
 // AudioFile statics
 //------------------------------------------------------------
@@ -122,8 +251,7 @@ AudioFile::Initializer::Initializer()
     formatNames_s.add(FMT_UNKNOWN, "UNKNOWN", "Unknown");
     formatNames_s.add(FMT_WAV,     "WAV",     "Microsoft WAV");
 	formatNames_s.add(FMT_AIFF,    "AIF",     "Apple/SGI AIFF");
-    formatNames_s.add(FMT_AIFC,    "AIFC",    "Apple/SGI AIFF");
-	formatNames_s.add(FMT_AU,	  "AU",       "Sun/NeXT AU");
+	formatNames_s.add(FMT_AU,	   "AU",      "Sun/NeXT AU");
 	formatNames_s.add(FMT_RAW,     "RAW",     "RAW PCM data");
 	formatNames_s.add(FMT_PAF,     "PAF",     "Ensoniq PARIS");
 	formatNames_s.add(FMT_SVX,     "SVX",     "Amiga IFF / SVX8 / SV16");
@@ -134,7 +262,7 @@ AudioFile::Initializer::Initializer()
 	formatNames_s.add(FMT_MAT4,    "MAT4",    "Matlab V4.2 / GNU Octave 2.0");
 	formatNames_s.add(FMT_MAT5,    "MAT5",    "Matlab V5.0 / GNU Octave 2.1");
 	formatNames_s.add(FMT_PVF,     "PVF",     "Portable Voice Format");
-	formatNames_s.add(FMT_XI,	  "XI",       "Fasttracker 2 Extended Instrument");
+	formatNames_s.add(FMT_XI,	   "XI",      "Fasttracker 2 Extended Instrument");
 	formatNames_s.add(FMT_HTK,     "HTK",     "HMM Tool Kit format");
 	formatNames_s.add(FMT_SDS,     "SDS",     "Midi Sample Dump Standard");
 	formatNames_s.add(FMT_AVR,     "AVR",     "Audio Visual Research");

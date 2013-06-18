@@ -1,17 +1,5 @@
 
 
-#ifndef AUDIOFILE_LIB
-    #define AUDIOFILE_LIB SNDFILE
-#endif
-
-#if AUDIOFILE_LIB == SNDFILE
-    #include <wrapper/LibSndFile.h>
-    typedef LibSndFile AudioFileImpl;
-#elif AUDIOFILE_LIB == PORTSF
-    #include <wrapper/PortSfFile.h>
-    typedef PortSfFile AudioFileImpl;
-#endif
-
 #include <boost/algorithm/string.hpp>
 
 #include <Macros.h>
@@ -22,8 +10,8 @@
 #include <core/AudioFactory.h>
 
 
-AudioFile*     AudioFactory::createAudioFile()        { return new AudioFileImpl(); }
-AudioFilePtr   AudioFactory::createAudioFilePtr()     { return AudioFilePtr(new AudioFileImpl()); }
+//AudioFile*     AudioFactory::createAudioFile()        { return new AudioFile(); }
+//AudioFilePtr   AudioFactory::createAudioFilePtr()     { return AudioFilePtr(new AudioFile()); }
 
     
 AudioFactory::AudioBridgeNames AudioFactory::audioBridgeNames_s;

@@ -43,7 +43,7 @@ public:
 protected:
     SNDFILE* handle_;
 
-    int makeSFFormat() const;
+    int makeSFFormat() const  { return format_ | encoding_; }
 
     /*! Helper class to perform static intialization */
     class Initializer {

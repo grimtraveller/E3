@@ -92,9 +92,15 @@
     <ClCompile Include="..\..\src\core\AudioFactory.cpp" />
     <ClCompile Include="..\..\src\core\AudioFile.cpp" />
     <ClCompile Include="..\..\src\core\CPUProfiler.cpp" />
-    <ClCompile Include="..\..\src\wrapper\LibSndFile.cpp" />
+    <ClCompile Include="..\..\src\wrapper\LibSndFile.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\src\wrapper\PortAudioBridge.cpp" />
-    <ClCompile Include="..\..\src\wrapper\PortSfFile.cpp" />
+    <ClCompile Include="..\..\src\wrapper\PortSfFile.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\src\wrapper\RtAudioBridge.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -106,9 +112,15 @@
     <ClInclude Include="..\..\include\core\Buffer.h" />
     <ClInclude Include="..\..\include\core\CPUProfiler.h" />
     <ClInclude Include="..\..\include\core\IntegerTypes.h" />
-    <ClInclude Include="..\..\include\wrapper\LibSndFile.h" />
+    <ClInclude Include="..\..\include\wrapper\LibSndFile.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\..\include\wrapper\PortAudioBridge.h" />
-    <ClInclude Include="..\..\include\wrapper\PortSfFile.h" />
+    <ClInclude Include="..\..\include\wrapper\PortSfFile.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\..\include\wrapper\RtAudioBridge.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

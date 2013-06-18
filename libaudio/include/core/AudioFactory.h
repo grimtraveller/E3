@@ -28,8 +28,8 @@ public:
         RtAudio   = 2
     };
 
-    static AudioFile*     createAudioFile();
-    static AudioFilePtr   createAudioFilePtr();
+    //static AudioFile*     createAudioFile();
+    //static AudioFilePtr   createAudioFilePtr();
     static AudioBridge*   createAudioBridge(AudioBridgeLib libId=PortAudio);
     static AudioBridgePtr createAudioBridgePtr(AudioBridgeLib libId=PortAudio);
     static AudioBridgePtr createAudioBridgePtr(const std::string& libName);
