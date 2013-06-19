@@ -2,9 +2,8 @@
 #include <exception>
 #include <samplerate.h> // libsamplerate
 
-#include <core/AudioFile.h>
-#include <core/AudioFactory.h>
-#include <core/AudioBuffer.h>
+#include <AudioFile.h>
+#include <AudioBuffer.h>
 
 
 AudioBuffer::AudioBuffer(int numChannels) :

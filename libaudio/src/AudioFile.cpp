@@ -2,8 +2,8 @@
 #include <sstream>
 #include <boost/assign/list_of.hpp>
 
-#include <core/AudioBuffer.h>
-#include <core/AudioFile.h>
+#include <AudioBuffer.h>
+#include <AudioFile.h>
 
 
 //-------------------------------------------

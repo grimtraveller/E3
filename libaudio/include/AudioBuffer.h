@@ -4,7 +4,7 @@
 #include <algorithm>
 
 #include <IntegerTypes.h>
-#include <core/Buffer.h>
+#include <Buffer.h>
 
 
 class AudioFile;

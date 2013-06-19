@@ -12,6 +12,7 @@
 #include <vector>
 #include <boost/unordered_map.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/smart_ptr.hpp>
 
 #include <EnumHelper.h>
 #include <IntegerTypes.h>
@@ -255,5 +256,8 @@ protected:
     };
     static Initializer initializer_s;
 };
+
+typedef boost::shared_ptr<AudioFile> AudioFilePtr;
+
 
 

@@ -9,10 +9,12 @@
 #include <vector>
 
 #include <IntegerTypes.h>
-#include <core/AudioBridge.h>
+#include <AudioBridge.h>
 
 
-
+//--------------------------------------------------------------------
+// Contains all information about an AudioDevice
+//--------------------------------------------------------------------
 class AudioDeviceInfo
 {
 public:
@@ -89,20 +91,21 @@ protected:
 };
 
 
-
+//--------------------------------------------------------------------
+// A physical audio device
+//--------------------------------------------------------------------
 class AudioDevice : public AudioDeviceInfo
 {
 public:
     enum SampleFormat
     {
-        SF_Int8    = 1,
-        SF_Int16   = 2,
-        SF_Int24   = 3,
-        SF_Int32   = 4,
-        SF_UInt8   = 5,
-        SF_Float32 = 6,
-        SF_Float64 = 7,
-        SF_Custom  = 8,
+        SF_Int8   = paInt8,
+        SF_Int16  = paInt16,
+        SF_Int24  = paInt24,
+        SF_Int32  = paInt32,
+        SF_UInt8  = paUInt8,
+        SF_Float32= paFloat32,
+        SF_Custom = paCustomFormat
     };
 
     enum StreamCallbackResult
@@ -115,47 +118,62 @@ public:
     
 public:
     AudioDevice(const AudioDeviceInfo& deviceInfo);
-    virtual ~AudioDevice();
+    ~AudioDevice();
 
-    virtual void setSampleRate(int sampleRate)        { sampleRate_ = sampleRate; }
-    virtual int getSampleRate() const                 { return sampleRate_; }
+    void setSampleRate(int sampleRate)        { sampleRate_ = sampleRate; }
+    int getSampleRate() const                 { return sampleRate_; }
 
-    virtual void setNumChannels(int numChannels)      { numChannels_ = numChannels; }
-    virtual int getNumChannels() const                { return numChannels_; }
+    void setNumChannels(int numChannels)      { numChannels_ = numChannels; }
+    int getNumChannels() const                { return numChannels_; }
 
-    virtual void setBufferSize(uint32 bufferSize)     { bufferSize_ = bufferSize; }
-    virtual uint32 getBufferSize() const              { return bufferSize_; }
+    void setBufferSize(uint32 bufferSize)     { bufferSize_ = bufferSize; }
+    uint32 getBufferSize() const              { return bufferSize_; }
     
-    virtual void setSampleFormat(SampleFormat format) { sampleFormat_ = format; }
-    virtual SampleFormat getSampleFormat() const      { return sampleFormat_; }
+    void setSampleFormat(SampleFormat format) { sampleFormat_ = format; }
+    SampleFormat getSampleFormat() const      { return sampleFormat_; }
 
-    virtual void setInterleaved(bool value)           { interleaved_ = value; }
-    virtual bool getInterleaved() const               { return interleaved_; }
+    void setInterleaved(bool value)           { interleaved_ = value; }
+    bool getInterleaved() const               { return interleaved_; }
 
-    void setHostApiSpecificStreamInfo(void* info)   { hostApiSpecificStreamInfo_ = info; }
+    void setHostApiSpecificStreamInfo(void* info)     { hostApiSpecificStreamInfo_ = info; }
+
+    //static int paStreamCallback(
+    //    const void* input, 
+    //    void* output,
+    //    unsigned long numFrames,
+    //    const PaStreamCallbackTimeInfo* timeInfo,
+    //    PaStreamCallbackFlags status,
+    //    void* userData);
+
+    typedef PaStreamCallbackTimeInfo StreamCallbackTimeInfo;
+    typedef PaStreamCallbackFlags StreamCallbackFlags;
+    //typedef PaStreamCallback StreamCallback;
 
     typedef int StreamCallback(
-        const void* input, 
-        void* output,
-        uintf32 numFrames,
-        void* timeInfo,
-        uintf32 status,
-        void* userData);
+          const void* input, 
+          void* output,
+          unsigned long numFrames,
+          const StreamCallbackTimeInfo* timeInfo,
+          StreamCallbackFlags status,
+          void* userData);
     
     StreamCallback* streamCallback_;
     void* callbackData_;
 
-    virtual void openCallbackStream(StreamCallback* callback, void* userData) = 0;
-    virtual void startCallbackStream() = 0;
-    virtual void closeCallbackStream() {};
-    virtual bool isStreamActive() const = 0;
+    void openCallbackStream(StreamCallback* callback, void* userData);
+    void startCallbackStream();
+    void closeCallbackStream();
+    bool isStreamActive() const;
 
-    //virtual double getStreamTime() const = 0;
-    virtual double getStreamLatency() const = 0;           //! The latency of an opened stream in seconds
-    virtual int getStreamSampleRate() const = 0;           //! The sample rate of an opened stream
-    virtual double getStreamCPULoad() const = 0;
+    double getStreamLatency() const;           //! The latency of an opened stream in seconds
+    int getStreamSampleRate() const;           //! The sample rate of an opened stream
+    double getStreamCPULoad() const;
+
+    bool isSampleRateSupported(unsigned sampleRate) const;
 
 protected:
+    PaStream* stream_;
+
     int sampleRate_;
     int numChannels_;
     unsigned bufferSize_;

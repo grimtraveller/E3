@@ -10,6 +10,20 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\AudioBridge.h" />
+    <ClInclude Include="..\..\include\AudioBuffer.h" />
+    <ClInclude Include="..\..\include\AudioDevice.h" />
+    <ClInclude Include="..\..\include\AudioFile.h" />
+    <ClInclude Include="..\..\include\Buffer.h" />
+    <ClInclude Include="..\..\include\CPUProfiler.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\AudioBridge.cpp" />
+    <ClCompile Include="..\..\src\AudioBuffer.cpp" />
+    <ClCompile Include="..\..\src\AudioDevice.cpp" />
+    <ClCompile Include="..\..\src\AudioFile.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BBFF8186-319F-4EB8-98F5-BA995CBBF2D2}</ProjectGuid>
     <RootNamespace>libaudio</RootNamespace>
@@ -85,44 +99,6 @@
       <Command>copy /Y "$(ProjectDir)$(Configuration)\$(TargetFileName)" "$(ProjectDir)..\..\lib\libaudio.lib"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\core\AudioBridge.cpp" />
-    <ClCompile Include="..\..\src\core\AudioBuffer.cpp" />
-    <ClCompile Include="..\..\src\core\AudioDevice.cpp" />
-    <ClCompile Include="..\..\src\core\AudioFactory.cpp" />
-    <ClCompile Include="..\..\src\core\AudioFile.cpp" />
-    <ClCompile Include="..\..\src\core\CPUProfiler.cpp" />
-    <ClCompile Include="..\..\src\wrapper\LibSndFile.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\wrapper\PortAudioBridge.cpp" />
-    <ClCompile Include="..\..\src\wrapper\PortSfFile.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\wrapper\RtAudioBridge.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\include\core\AudioBridge.h" />
-    <ClInclude Include="..\..\include\core\AudioBuffer.h" />
-    <ClInclude Include="..\..\include\core\AudioDevice.h" />
-    <ClInclude Include="..\..\include\core\AudioFactory.h" />
-    <ClInclude Include="..\..\include\core\AudioFile.h" />
-    <ClInclude Include="..\..\include\core\Buffer.h" />
-    <ClInclude Include="..\..\include\core\CPUProfiler.h" />
-    <ClInclude Include="..\..\include\core\IntegerTypes.h" />
-    <ClInclude Include="..\..\include\wrapper\LibSndFile.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wrapper\PortAudioBridge.h" />
-    <ClInclude Include="..\..\include\wrapper\PortSfFile.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wrapper\RtAudioBridge.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
