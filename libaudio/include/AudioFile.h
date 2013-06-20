@@ -198,7 +198,8 @@ public:
     bool hasError() const                   { return sf_error(handle_) != SF_ERR_NO_ERROR; }
     bool isReadable() const                 { return isOpen() && (fileOpenMode_ == OpenRead  || fileOpenMode_ == OpenRdwr); }
     bool isWriteable() const                { return isOpen() && (fileOpenMode_ == OpenWrite || fileOpenMode_ == OpenRdwr); }
-    bool checkFormat() const;
+    bool checkFormat() const                { return checkFormat(format_, encoding_, sampleRate_, numChannels_); }
+    static bool checkFormat(Format format, Encoding encoding, int sampleRate, int numChannels);
 
     std::string getErrorString()            { return sf_strerror(handle_); }
     std::string getVersionString() const;
@@ -220,6 +221,8 @@ public:
 
     float getDurationSec() const			{ return (float)numFrames_ / (float)sampleRate_; }
     float getDurationMs() const				{ return (float)numFrames_ / (float)sampleRate_ / 1000; }
+
+    SNDFILE* getHandle() const              { return handle_; }
 
 	virtual InstrumentChunk& getInstrumentChunk()   { return instrumentChunk_; }
 

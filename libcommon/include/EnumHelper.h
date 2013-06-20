@@ -58,8 +58,11 @@ public:
 template<typename TEnum>
 class EnumNames
 {
-protected:
+public:
     typedef std::map<typename TEnum, std::string> NameMap;
+    typename typedef NameMap::const_iterator ConstIterator;
+
+protected:
     NameMap shortNames_;
     NameMap longNames_;
 
@@ -88,8 +91,10 @@ public:
         throw EnumException();
     }
 
-    const std::string& getShortName(TEnum value) const     { return findName(value, shortNames_); }    
-    const std::string& getLongName(TEnum value) const      { return findName(value, longNames_); }    
+    const std::string& getShortName(TEnum value) const { return findName(value, shortNames_); }    
+    const std::string& getLongName(TEnum value) const  { return findName(value, longNames_); }
+    ConstIterator begin() const                        { return shortNames_.begin(); }  // TODO: return iterator only over keys, not values
+    ConstIterator end() const                          { return shortNames_.end(); }
 
 protected:
     const std::string& findName(TEnum value, const NameMap& map) const          

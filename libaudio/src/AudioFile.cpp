@@ -146,14 +146,14 @@ int64 AudioFile::seek(int64 frame)
 
 
 
-bool AudioFile::checkFormat() const
+bool AudioFile::checkFormat(Format format, Encoding encoding, int sampleRate, int numChannels)
 {
     SF_INFO sfInfo;
     memset(&sfInfo, 0, sizeof(sfInfo));
 
-    sfInfo.format     = packFormat();
-    sfInfo.samplerate = sampleRate_;
-    sfInfo.channels   = numChannels_;
+    sfInfo.format     = format | encoding;
+    sfInfo.samplerate = sampleRate;
+    sfInfo.channels   = numChannels;
 
     int result = sf_format_check(&sfInfo);
     return result != SF_FALSE;
