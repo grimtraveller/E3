@@ -199,10 +199,8 @@ public:
     bool isReadable() const                 { return isOpen() && (fileOpenMode_ == OpenRead  || fileOpenMode_ == OpenRdwr); }
     bool isWriteable() const                { return isOpen() && (fileOpenMode_ == OpenWrite || fileOpenMode_ == OpenRdwr); }
     bool checkFormat() const                { return checkFormat(format_, encoding_, sampleRate_, numChannels_); }
-    static bool checkFormat(Format format, Encoding encoding, int sampleRate, int numChannels);
 
     std::string getErrorString()            { return sf_strerror(handle_); }
-    std::string getVersionString() const;
     
     const Path& getFilename() const         { return filename_; }
     void setFilename(const Path& filename)  { filename_ = filename; }  
@@ -224,7 +222,15 @@ public:
 
     SNDFILE* getHandle() const              { return handle_; }
 
-	virtual InstrumentChunk& getInstrumentChunk()   { return instrumentChunk_; }
+	InstrumentChunk& getInstrumentChunk()   { return instrumentChunk_; }
+
+    static bool checkFormat(int format, int codec, int sampleRate=11000, int numChannels=1);
+    static bool checkFormat(Format format, Encoding encoding, int sampleRate=11000, int numChannels=1);
+    static std::string getVersionString();
+
+    static std::string getFormatName(int format);
+    static std::string getFormatExtension(int format);
+    static std::string getEncodingName(int encoding);
 
     typedef EnumNames<Format> FormatNames;
     static const FormatNames& getFormatNames()      { return formatNames_s; }

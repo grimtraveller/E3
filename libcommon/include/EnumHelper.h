@@ -95,6 +95,7 @@ public:
     const std::string& getLongName(TEnum value) const  { return findName(value, longNames_); }
     ConstIterator begin() const                        { return shortNames_.begin(); }  // TODO: return iterator only over keys, not values
     ConstIterator end() const                          { return shortNames_.end(); }
+    int getCount() const                               { return shortNames_.getCount(); }
 
 protected:
     const std::string& findName(TEnum value, const NameMap& map) const          
