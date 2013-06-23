@@ -252,7 +252,7 @@ std::string AudioFile::getFormatName(int format)
     SF_FORMAT_INFO info;
     //info.format = (format >> 16) - 1;
     info.format = format;
-    int result = sf_command (NULL, SFC_GET_FORMAT_MAJOR, &info, sizeof(info));
+    int result = sf_command (NULL, SFC_GET_FORMAT_INFO, &info, sizeof(info));
 
     if(result != 0) {
         EXCEPTION(std::exception, "Invalid format\n");
