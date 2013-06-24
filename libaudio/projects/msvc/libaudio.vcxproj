@@ -15,6 +15,7 @@
     <ClInclude Include="..\..\include\AudioBuffer.h" />
     <ClInclude Include="..\..\include\AudioDevice.h" />
     <ClInclude Include="..\..\include\AudioFile.h" />
+    <ClInclude Include="..\..\include\AudioFormatManager.h" />
     <ClInclude Include="..\..\include\Buffer.h" />
     <ClInclude Include="..\..\include\CPUProfiler.h" />
   </ItemGroup>

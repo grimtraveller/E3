@@ -97,7 +97,7 @@ const AudioDeviceInfo& AudioBridge::getDeviceInfo(int deviceId) const
             return info;
         }
     }
-    EXCEPTION(std::exception, "device not found (device: %d)\n", deviceId);
+    EXCEPTION(std::exception, "device not found (device: %d)", deviceId);
 }
 
 
@@ -119,7 +119,7 @@ AudioDevicePtr AudioBridge::getDevice(const std::string& portName, const std::st
             return getDevice(info.getDeviceId());
         }
     }
-    EXCEPTION(std::exception, "no such device: %s)\n", deviceName);
+    EXCEPTION(std::exception, "no such device: %s)", deviceName);
 }
 
 
@@ -134,7 +134,7 @@ AudioDevicePtr AudioBridge::getInputDevice(int deviceId) const
             }
         }
     }
-    EXCEPTION(std::exception, "device not found (device: %d)\n", deviceId);
+    EXCEPTION(std::exception, "device not found (device: %d)", deviceId);
 }
 
 
@@ -149,7 +149,7 @@ AudioDevicePtr AudioBridge::getOutputDevice(int deviceId) const
             }
         }
     }
-    EXCEPTION(std::exception, "device not found (device: %d)\n", deviceId);
+    EXCEPTION(std::exception, "device not found (device: %d)", deviceId);
 }
 
 

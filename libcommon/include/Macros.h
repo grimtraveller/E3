@@ -15,17 +15,30 @@
 // Throws an exception of the given type.
 // The text for the exception can be formatted in printf-style.
 //
-#define EXCEPTION( type, format, ...) \
+#ifdef _DEBUG
+#define EXCEPTION( type, message, ...) \
     {\
 	char f[300];\
 	char b[300];\
-	strcpy( f, format );\
-	strcat( f, " [" ); \
+	strcpy( f, "[" ); \
 	strcat( f, #type );\
 	strcat( f, " in %s, %s, line %d]\n" );\
+    strcat( f, message );\
+    strcat( f, "\n");\
 	sprintf( b, f, __VA_ARGS__, __FILE_ONLY__, __FUNCTION__, __LINE__ );\
     throw type( b );\
     }
+#else
+#define EXCEPTION( type, message, ...) \
+    {\
+	char f[300];\
+	char b[300];\
+    strcpy( f, message );\
+    strcat( f, "\n");\
+	sprintf( b, f, __VA_ARGS__ );\
+    throw type( b );\
+    }
+#endif
 
 // Throws a std::runtime_error if condition fails.
 //

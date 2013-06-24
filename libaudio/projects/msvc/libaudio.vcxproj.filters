@@ -25,6 +25,9 @@
     <ClInclude Include="..\..\include\CPUProfiler.h">
       <Filter>Quelldateien</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\AudioFormatManager.h">
+      <Filter>Quelldateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\AudioBridge.cpp">

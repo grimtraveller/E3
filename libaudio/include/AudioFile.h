@@ -55,6 +55,8 @@ public:
 	    FMT_OGG     = SF_FORMAT_OGG,      // Xiph OGG container 
 	    FMT_MPC2K   = SF_FORMAT_MPC2K,    // Akai MPC 2000 sampler 
 	    FMT_RF64    = SF_FORMAT_RF64,     // RF64 WAV file 
+        // up zo here libsndfile
+        FMT_MPEG    = 0x01000000          // MPEG Layer I/II/III
     };
 
     enum Encoding
@@ -194,10 +196,10 @@ public:
     int64 writeFloat(float* buffer, int64 num)      { return sf_write_float(handle_, buffer, num); }
     int64 writeDouble(double* buffer, int64 num)    { return sf_write_double(handle_, buffer, num); }
 
-    bool isOpen() const                     { return handle_ != NULL; }
+    bool isLoaded() const                   { return handle_ != NULL; }
     bool hasError() const                   { return sf_error(handle_) != SF_ERR_NO_ERROR; }
-    bool isReadable() const                 { return isOpen() && (fileOpenMode_ == OpenRead  || fileOpenMode_ == OpenRdwr); }
-    bool isWriteable() const                { return isOpen() && (fileOpenMode_ == OpenWrite || fileOpenMode_ == OpenRdwr); }
+    bool isReadable() const                 { return isLoaded() && (fileOpenMode_ == OpenRead  || fileOpenMode_ == OpenRdwr); }
+    bool isWriteable() const                { return isLoaded() && (fileOpenMode_ == OpenWrite || fileOpenMode_ == OpenRdwr); }
     bool checkFormat() const                { return checkFormat(format_, encoding_, sampleRate_, numChannels_); }
 
     std::string getErrorString()            { return sf_strerror(handle_); }

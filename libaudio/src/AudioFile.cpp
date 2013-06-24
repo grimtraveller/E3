@@ -119,7 +119,7 @@ void AudioFile::store(const AudioBuffer* buffer)
         return;
 
     if(buffer->getSampleRate() != sampleRate_) 
-        EXCEPTION(std::exception, "Can not store data with sample rate %d to file with sample rate %d\n", buffer->getSampleRate(), sampleRate_);
+        EXCEPTION(std::exception, "Can not store data with sample rate %d to file with sample rate %d", buffer->getSampleRate(), sampleRate_);
 
     if(isWriteable() == false)
         EXCEPTION(std::exception, "File not writeable");
@@ -255,7 +255,7 @@ std::string AudioFile::getFormatName(int format)
     int result = sf_command (NULL, SFC_GET_FORMAT_INFO, &info, sizeof(info));
 
     if(result != 0) {
-        EXCEPTION(std::exception, "Invalid format\n");
+        EXCEPTION(std::exception, "Invalid format");
     }
     return info.name;
 }
@@ -270,7 +270,7 @@ std::string AudioFile::getFormatExtension(int format)
     int result = sf_command(NULL, SFC_GET_FORMAT_INFO, &info, sizeof(info));
 
     if(result != 0) {
-        EXCEPTION(std::exception, "Invalid format\n");
+        EXCEPTION(std::exception, "Invalid format");
     }
     return info.extension;
 }
@@ -284,7 +284,7 @@ std::string AudioFile::getEncodingName(int encoding)
     int result = sf_command(NULL, SFC_GET_FORMAT_INFO, &info, sizeof(info));
 
     if(result != 0) {
-        EXCEPTION(std::exception, "Invalid codec\n");
+        EXCEPTION(std::exception, "Invalid codec");
     }
     return info.name;
 }
