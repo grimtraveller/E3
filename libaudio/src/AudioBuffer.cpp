@@ -2,7 +2,6 @@
 #include <exception>
 #include <samplerate.h> // libsamplerate
 
-#include <AudioFile.h>
 #include <AudioBuffer.h>
 
 

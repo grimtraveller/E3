@@ -15,7 +15,11 @@
     <ClInclude Include="..\..\include\AudioBuffer.h" />
     <ClInclude Include="..\..\include\AudioDevice.h" />
     <ClInclude Include="..\..\include\AudioFile.h" />
-    <ClInclude Include="..\..\include\AudioFormatManager.h" />
+    <ClInclude Include="..\..\include\AudioFormat.h" />
+    <ClInclude Include="..\..\include\InstrumentChunk.h" />
+    <ClInclude Include="..\..\include\MpegFile.h" />
+    <ClInclude Include="..\..\include\MultiFormatAudioFile.h" />
+    <ClInclude Include="..\..\include\FormatManager.h" />
     <ClInclude Include="..\..\include\Buffer.h" />
     <ClInclude Include="..\..\include\CPUProfiler.h" />
   </ItemGroup>
@@ -24,6 +28,10 @@
     <ClCompile Include="..\..\src\AudioBuffer.cpp" />
     <ClCompile Include="..\..\src\AudioDevice.cpp" />
     <ClCompile Include="..\..\src\AudioFile.cpp" />
+    <ClCompile Include="..\..\src\FormatManager.cpp" />
+    <ClCompile Include="..\..\src\InstrumentChunk.cpp" />
+    <ClCompile Include="..\..\src\MpegFile.cpp" />
+    <ClCompile Include="..\..\src\MultiFormatAudioFile.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BBFF8186-319F-4EB8-98F5-BA995CBBF2D2}</ProjectGuid>
@@ -56,7 +64,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetExt>.lib</TargetExt>
-    <IncludePath>D:\Dev\C++\Lib\boost\boost_1_49_0;D:\Dev\C++\Lib\rtaudio-4.0.11;D:\Dev\C++\Lib\portaudio-19.0\include;D:\Dev\C++\Lib\E3\libcommon\include;D:\Dev\C++\Lib\libsndfile-1.0.25\msvc;D:\Dev\C++\Lib\portsf\src;D:\Dev\C++\Lib\libsamplerate-0.1.8\src;D:\Dev\C++\Lib\E3\libaudio\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Dev\C++\Lib\boost\boost_1_49_0;D:\Dev\C++\Lib\portaudio-19.0\include;D:\Dev\C++\Lib\E3\libcommon\include;D:\Dev\C++\Lib\libmad-0.15.1b;D:\Dev\C++\Lib\libsndfile-1.0.25\msvc;D:\Dev\C++\Lib\libsamplerate-0.1.8\src;D:\Dev\C++\Lib\E3\libaudio\include;$(IncludePath)</IncludePath>
     <LibraryPath>D:\Dev\C++\Lib\boost\boost_1_49_0\lib\i386;D:\Dev\C++\Lib\E3\libcommon\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
@@ -65,7 +73,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetExt>.lib</TargetExt>
-    <IncludePath>D:\Dev\C++\Lib\boost\boost_1_49_0;D:\Dev\C++\Lib\rtaudio-4.0.11;D:\Dev\C++\Lib\portaudio-19.0\include;D:\Dev\C++\Lib\E3\libcommon\include;D:\Dev\C++\Lib\libsndfile-1.0.25\msvc;D:\Dev\C++\Lib\portsf\src;D:\Dev\C++\Lib\libsamplerate-0.1.8\src;D:\Dev\C++\Lib\E3\libaudio\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Dev\C++\Lib\boost\boost_1_49_0;D:\Dev\C++\Lib\portaudio-19.0\include;D:\Dev\C++\Lib\E3\libcommon\include;D:\Dev\C++\Lib\libmad-0.15.1b;D:\Dev\C++\Lib\libsndfile-1.0.25\msvc;D:\Dev\C++\Lib\libsamplerate-0.1.8\src;D:\Dev\C++\Lib\E3\libaudio\include;$(IncludePath)</IncludePath>
     <LibraryPath>D:\Dev\C++\Lib\boost\boost_1_49_0\lib\i386;D:\Dev\C++\Lib\E3\libcommon\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>

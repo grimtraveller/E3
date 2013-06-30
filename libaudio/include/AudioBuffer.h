@@ -7,9 +7,6 @@
 #include <Buffer.h>
 
 
-class AudioFile;
-
-
 class AudioBuffer : public Buffer<float>
 {
 public:
