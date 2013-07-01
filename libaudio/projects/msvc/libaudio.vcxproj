@@ -17,6 +17,7 @@
     <ClInclude Include="..\..\include\AudioFile.h" />
     <ClInclude Include="..\..\include\AudioFormat.h" />
     <ClInclude Include="..\..\include\InstrumentChunk.h" />
+    <ClInclude Include="..\..\include\MadDecoder.h" />
     <ClInclude Include="..\..\include\MpegFile.h" />
     <ClInclude Include="..\..\include\MultiFormatAudioFile.h" />
     <ClInclude Include="..\..\include\FormatManager.h" />
@@ -30,6 +31,7 @@
     <ClCompile Include="..\..\src\AudioFile.cpp" />
     <ClCompile Include="..\..\src\FormatManager.cpp" />
     <ClCompile Include="..\..\src\InstrumentChunk.cpp" />
+    <ClCompile Include="..\..\src\MadDecoder.cpp" />
     <ClCompile Include="..\..\src\MpegFile.cpp" />
     <ClCompile Include="..\..\src\MultiFormatAudioFile.cpp" />
   </ItemGroup>

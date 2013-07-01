@@ -5,13 +5,16 @@
 
 #pragma once
 
+#include <stdio.h>
+
 #include <boost/smart_ptr.hpp>
 #include <mad.h>
 
-#include <Buffer.h>
+#include <IntegerTypes.h>
 #include <AudioFile.h>
 
 class AudioBuffer;
+class MadDecoder;
 
 
 class MpegFile : public AudioFile
@@ -35,28 +38,10 @@ public:
 
 protected:
     FILE* handle_;
+    MadDecoder* decoder_;
     friend class FormatManager;
     static void initFormatInfos(FormatInfoVector& infos);
     static void initCodecInfos(CodecInfoVector& infos);
-
-    int64 getDuration();
-    void fileRead();
-    size_t mpegRead(size_t len, AudioBuffer* buffer);
-    bool consumeId3Tag();
-
-    typedef Buffer<unsigned char> MpegBuffer;
-    MpegBuffer mpegBuffer_;
-    int currentSample_;
-    size_t signalLength_;
-
-    struct mad_stream madStream_;
-    struct mad_frame  madFrame_;
-    struct mad_synth  madSynth_;
-    mad_timer_t       madTimer_;
-
-    static unsigned long xingFrames(struct mad_bitptr ptr, unsigned bitlen);
-    static void madTimerMultiply(mad_timer_t* t, double d);
-    static int getId3TagSize(const unsigned char* data, size_t length);
 };
 
 typedef boost::shared_ptr<MpegFile> MpegFilePtr;

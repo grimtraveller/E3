@@ -7,12 +7,14 @@
 
 #pragma once
 
-#include <sndfile.h>  // libsndfile
+#include <stdio.h>
 
 #include <vector>
 #include <boost/unordered_map.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/smart_ptr.hpp>
+
+#include <sndfile.h>  // libsndfile
 
 #include <EnumHelper.h>
 #include <IntegerTypes.h>
