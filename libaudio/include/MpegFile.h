@@ -26,12 +26,9 @@ public:
 
     void open(const Path& filename, FileOpenMode mode);
     void load(AudioBuffer* buffer);
-    void store(const AudioBuffer* buffer)               {}
+    void store(const AudioBuffer* buffer)               { EXCEPTION(std::exception, "Storing not implemented for MPEG"); }
     void close();
-    int64 seek(int64 frame)                             { return 0; }
-
     bool isOpened() const                               { return handle_ != NULL; }
-    bool isSeekable() const;
     
     std::string getVersionString() const                { return mad_version; }
     static bool isFormatSupported(const FormatInfo& format, const CodecInfo& codec, int sampleRate=0, int numChannels=1);

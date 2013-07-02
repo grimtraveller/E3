@@ -25,7 +25,7 @@
 	strcat( f, " in %s, %s, line %d]\n" );\
     strcat( f, message );\
     strcat( f, "\n");\
-	sprintf( b, f, __VA_ARGS__, __FILE_ONLY__, __FUNCTION__, __LINE__ );\
+	sprintf( b, f, __FILE_ONLY__, __FUNCTION__, __LINE__, __VA_ARGS__);\
     throw type( b );\
     }
 #else

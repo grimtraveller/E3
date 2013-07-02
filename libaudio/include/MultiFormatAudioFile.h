@@ -54,7 +54,6 @@ public:
 
     SNDFILE* getHandle() const                      { return handle_; }
     bool isOpened() const                           { return handle_ != NULL; }
-    bool isSeekable() const                         { return seekable_; }
     int getNumSections() const                      { return numSections_; }
 
     static std::string getVersionString();
@@ -66,7 +65,6 @@ protected:
     void storeInstrumentChunk();
 
 	int	numSections_;
-	bool seekable_;
     SNDFILE* handle_;
 
     friend class FormatManager;

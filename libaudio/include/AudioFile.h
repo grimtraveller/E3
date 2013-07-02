@@ -35,7 +35,7 @@ public:
     virtual void load(AudioBuffer* buffer)                     = 0;
     virtual void store(const AudioBuffer* buffer)              = 0;
     virtual void close()                                       = 0;
-	virtual int64 seek(int64 frame)                            = 0;
+    virtual int64 seek(int64 frame)                            { return 0; }
 
     virtual void setFormat(const FormatInfo& format)    { format_ = format; }
     virtual void setCodec(const CodecInfo& codec)       { codec_  = codec; }
@@ -51,13 +51,11 @@ public:
     virtual void setNumChannels(int numChannels)        { numChannels_ = numChannels; }
 
     virtual int64 getNumFrames() const                  { return numFrames_; }
-    virtual float getDurationSec() const			    { return (float)numFrames_ / (float)sampleRate_; }
-    virtual float getDurationMs() const				    { return (float)numFrames_ / (float)sampleRate_ / 1000; }
+    virtual float getDurationSec() const    		    { return (float)numFrames_ / (float)sampleRate_; }
 
     virtual bool isOpened() const                       { return false; }
     virtual bool isReadable() const                     { return isOpened() && (fileOpenMode_ == OpenRead  || fileOpenMode_ == OpenRdwr); }
     virtual bool isWriteable() const                    { return isOpened() && (fileOpenMode_ == OpenWrite || fileOpenMode_ == OpenRdwr); }
-    virtual bool isSeekable() const                     { return false; }
 
     virtual std::string getVersionString() const        { return ""; }
 

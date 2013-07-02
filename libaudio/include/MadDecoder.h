@@ -21,16 +21,16 @@ class MadDecoder
 public:
     MadDecoder();
 
-    void start(FILE* handle, size_t bufferSize);
+    size_t start(FILE* handle, size_t bufferSize);
     void finish();
     size_t decode(size_t len, AudioBuffer* buffer);
 
     int getSampleRate() const   { return madSynth_.pcm.samplerate; }
-    int64 getNumFrames() const  { return (int64)(signalLength_ * .001 * (int64)getSampleRate() + .5); }
+    //int64 getNumFrames() const  { return (int64)(durationMsec_ * .001 * (int64)getSampleRate() + .5); }
     int getNumChannels() const;
 
 protected:
-    int64 getDuration(unsigned char* buffer, size_t bufferSize);
+    int64 getDurationMs(unsigned char* buffer, size_t bufferSize);
     bool readMpgFile();
     bool consumeId3Tag();
 
@@ -40,7 +40,8 @@ protected:
     FILE* handle_;
     size_t bufferSize_;
     int currentFrame_;
-    int64 signalLength_;
+    int numMpegFrames_;
+    int64 durationMsec_;
 
     struct mad_stream madStream_;
     struct mad_frame  madFrame_;

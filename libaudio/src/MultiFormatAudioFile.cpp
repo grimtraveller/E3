@@ -14,8 +14,7 @@
     
 MultiFormatAudioFile::MultiFormatAudioFile() : AudioFile(),
 	numSections_(1),
-    handle_(NULL),
-	seekable_(false)
+    handle_(NULL)
 {}
 
 
@@ -59,7 +58,6 @@ void MultiFormatAudioFile::open(const Path& filename, FileOpenMode mode)
         numFrames_   = sfInfo.frames;
         numChannels_ = sfInfo.channels;
         numSections_ = sfInfo.sections;
-        seekable_    = sfInfo.seekable == 1;
     }
 
     if(sf_error(handle_) != SF_ERR_NO_ERROR) 

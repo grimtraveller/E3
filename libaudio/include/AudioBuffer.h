@@ -40,7 +40,7 @@ public:
     void advance(int64 inc)              { framePos_ += inc; }
     float* getCurrent();
 
-    float* resize(size_t size);
+    float* resize(size_t size, bool clearData=true);
 
 protected:
     int sampleRate_;

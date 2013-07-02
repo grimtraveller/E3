@@ -25,11 +25,11 @@ MadDecoder::MadDecoder() :
     handle_(NULL),
     bufferSize_(0),
     currentFrame_(0),
-    signalLength_(0)
+    numMpegFrames_(0)
 {}
 
 
-void MadDecoder::start(FILE* handle, size_t bufferSize)
+size_t MadDecoder::start(FILE* handle, size_t bufferSize)
 {
     handle_     = handle;
     bufferSize_ = bufferSize;
@@ -39,9 +39,7 @@ void MadDecoder::start(FILE* handle, size_t bufferSize)
     ASSERT(decodeBuffer_.getSize() == bufferSize);
     unsigned char* buffer = decodeBuffer_.getHead();
 
-    //if(isSeekable()) {                  // TODO: what else?
-        signalLength_ = getDuration(buffer, bufferSize); 
-    //}
+    int64 durationMsec = getDurationMs(buffer, bufferSize); 
 
     mad_stream_init(&madStream_);
     mad_frame_init(&madFrame_);
@@ -87,7 +85,10 @@ void MadDecoder::start(FILE* handle, size_t bufferSize)
     mad_synth_frame(&madSynth_, &madFrame_);
 
     //unsigned int precision_ = 16;
-    currentFrame_ = 0;
+    currentFrame_  = 0;
+    numMpegFrames_ = 0;
+
+    return (size_t)(durationMsec * .001 * getSampleRate() + .5);  // number of sample frames
 }
 
 
@@ -118,7 +119,7 @@ int MadDecoder::getNumChannels() const
 
 
 
-int64 MadDecoder::getDuration(unsigned char* buffer, size_t bufferSize)
+int64 MadDecoder::getDurationMs(unsigned char* buffer, size_t bufferSize)
 {
     struct mad_stream madStream;
     struct mad_frame  madFrame;
@@ -243,12 +244,16 @@ bool MadDecoder::readMpgFile()
     size_t leftover = madStream_.bufend - madStream_.next_frame;
     memmove(buffer, madStream_.next_frame, leftover);
 
+    clearerr(handle_);
     size_t bytesRead = fread(buffer+leftover, (size_t)1, bufferSize-leftover, handle_);
 
     if (bytesRead != bufferSize && ferror(handle_))
         EXCEPTION(std::exception, "%s", strerror(errno));
-    if (bytesRead == 0)
+
+    if (bytesRead == 0) {       // eof
+        ASSERT(feof(handle_));
         return false;
+    }
 
     mad_stream_buffer(&madStream_, buffer, bytesRead+leftover);
     madStream_.error = MAD_ERROR_NONE;
@@ -266,16 +271,17 @@ bool MadDecoder::readMpgFile()
 size_t MadDecoder::decode(size_t numPendingTotal, AudioBuffer* buffer)
 {
     size_t numProcessedTotal = 0;
+    int numChannels = getNumChannels();
     mad_fixed_t sample;
 
     do {
-        size_t numPendingFrame   = (madSynth_.pcm.length - currentFrame_) * getNumChannels();
+        size_t numPendingFrame   = (madSynth_.pcm.length - currentFrame_) * numChannels;
         numPendingFrame          = std::min(numPendingTotal, numPendingFrame);
         size_t numProcessedFrame = 0;
 
         while(numProcessedFrame < numPendingFrame)
         {
-            for(int channel=0; channel<getNumChannels(); channel++)
+            for(int channel=0; channel<numChannels; channel++)
             {
                 sample = madSynth_.pcm.samples[channel][currentFrame_];
                 if (sample < -MAD_F_ONE)
@@ -297,7 +303,7 @@ size_t MadDecoder::decode(size_t numPendingTotal, AudioBuffer* buffer)
             break;
 
         if (madStream_.error == MAD_ERROR_BUFLEN) {     // check whether input buffer needs a refill 
-            if(readMpgFile() == false)                     // eof
+            if(readMpgFile() == false)                  // eof
                 break;
         }
 
@@ -314,10 +320,10 @@ size_t MadDecoder::decode(size_t numPendingTotal, AudioBuffer* buffer)
                     EXCEPTION(std::exception, "unrecoverable frame level error (%s).", mad_stream_errorstr(&madStream_));
             }
         }
-        //numFrames_++;
         mad_timer_add(&madTimer_, madFrame_.header.duration);
         mad_synth_frame(&madSynth_, &madFrame_);
         currentFrame_ = 0;
+        numMpegFrames_++;
     } 
     while(true);
 

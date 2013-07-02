@@ -41,17 +41,15 @@ void MpegFile::open(const Path& filename, FileOpenMode mode)
     default:       EXCEPTION(std::exception, "Only read mode is suported for MPEG");
     }
 
-    if(handle_ == NULL) {
+    if(handle_ == NULL) 
         EXCEPTION(std::exception, "%s: %s", strerror(errno), filename_.string().c_str());
-    }
 
     size_t bufferSize = 8192;
-    decoder_ = new MadDecoder();
-    decoder_->start(handle_, bufferSize);
+    decoder_      = new MadDecoder();
+    numFrames_    = decoder_->start(handle_, bufferSize);   // estimated value for CBR 
 
     sampleRate_   = decoder_->getSampleRate();
     numChannels_  = decoder_->getNumChannels();
-    numFrames_    = decoder_->getNumFrames();
     format_       = FormatManager::getFormat(FORMAT_MPEG);
     codec_        = FormatManager::getCodec(CODEC_MPEG);
 }
@@ -72,8 +70,10 @@ void MpegFile::load(AudioBuffer* buffer)
         if(buffer->getSize() == numSamples)
         {
             int numProcessed = decoder_->decode(numSamples, buffer);
-            //ASSERT(numProcessed == numSamples);   // TODO: check why this fails
+            buffer->resize(numProcessed, false);
+            numFrames_ = buffer->getNumFrames();    // now we know the real size
         }
+        else EXCEPTION(std::exception, "Out of memory");
     }
     catch(const std::exception& e) 
     {
@@ -94,22 +94,6 @@ void MpegFile::close()
         fclose(handle_);
         handle_ = NULL;
     }
-}
-
-
-//-----------------------------------------------------------
-// Protected members
-//-----------------------------------------------------------
-
-bool MpegFile::isSeekable() const
-{
-  if(handle_ == NULL)
-      return false;
-
-  struct stat st;
-  fstat(fileno(handle_), &st);
-
-  return ((st.st_mode & S_IFMT) == S_IFREG);
 }
 
 

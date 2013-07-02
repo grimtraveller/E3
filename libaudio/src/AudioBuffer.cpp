@@ -75,9 +75,11 @@ void AudioBuffer::convertSampleRate(int newRate)
 
 
 
-float* AudioBuffer::resize(size_t size)
+float* AudioBuffer::resize(size_t size, bool clearData)
 {
-    clear();
+    if(clearData)
+        clear();
+
     float* pResult = Buffer::resize(size);
 
     numFrames_ = (numChannels_ > 0 && data_) ? size / numChannels_ : 0;
