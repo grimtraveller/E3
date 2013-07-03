@@ -44,14 +44,13 @@ void MpegFile::open(const Path& filename, FileOpenMode mode)
     if(handle_ == NULL) 
         EXCEPTION(std::exception, "%s: %s", strerror(errno), filename_.string().c_str());
 
-    size_t bufferSize = 8192;
-    decoder_      = new MadDecoder();
-    numFrames_    = decoder_->start(handle_, bufferSize);   // estimated value for CBR 
+    decoder_     = new MadDecoder();
+    numFrames_   = decoder_->start(handle_);   // estimated value (when mpeg is CBR) 
 
-    sampleRate_   = decoder_->getSampleRate();
-    numChannels_  = decoder_->getNumChannels();
-    format_       = FormatManager::getFormat(FORMAT_MPEG);
-    codec_        = FormatManager::getCodec(CODEC_MPEG);
+    sampleRate_  = decoder_->getSampleRate();
+    numChannels_ = decoder_->getNumChannels();
+    format_      = FormatManager::getFormat(FORMAT_MPEG);
+    codec_       = FormatManager::getCodec(decoder_->getCodecId());
 }
 
 
@@ -98,27 +97,36 @@ void MpegFile::close()
 
 
 
+std::string MpegFile::getVersionString() const            
+{ 
+    return MadDecoder::getVersionString(); 
+}
+
+
+
 //-----------------------------------------------------------
 // Static members
 //-----------------------------------------------------------
 
 bool MpegFile::isFormatSupported(const FormatInfo& format, const CodecInfo& codec, int sampleRate, int numChannels)
 {
-    return format.id_ == FORMAT_MPEG && codec.id_ == CODEC_MPEG;
+    return format.id_ == FORMAT_MPEG && (codec.id_ == CODEC_MP1 || codec.id_ == CODEC_MP2 || codec.id_ == CODEC_MP3);
 }
 
 
 
 void MpegFile::initFormatInfos(FormatInfoVector& infos)
 {
-    infos.push_back(FormatInfo(FORMAT_MPEG, -1, "MPEG", "mp3", "MPEG Layer 1/2/3 lossy audio compression"));
+    infos.push_back(FormatInfo(FORMAT_MPEG, -1, "MPEG", "mp3", "MPEG Layer I/II/III lossy audio compression"));
 }
 
 
 
 void MpegFile::initCodecInfos(CodecInfoVector& infos)
 {
-    infos.push_back(CodecInfo(CODEC_MPEG, -1, "MPEG", "MPEG Layer 1/2/3"));
+    infos.push_back(CodecInfo(CODEC_MP1, -1, "MP1", "MPEG Layer I"));
+    infos.push_back(CodecInfo(CODEC_MP2, -1, "MP2", "MPEG Layer II"));
+    infos.push_back(CodecInfo(CODEC_MP3, -1, "MP3", "MPEG Layer III"));
 }
 
 

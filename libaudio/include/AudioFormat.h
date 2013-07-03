@@ -75,7 +75,9 @@ enum CodecId
 	CODEC_DPCM_16,      // 16 bit differential PCM (XI only) 
 
     CODEC_VORBIS,       // Xiph Vorbis encoding. 
-    CODEC_MPEG,         // MPEG Layer 1,2,3
+    CODEC_MP1,          // MPEG Layer I
+    CODEC_MP2,          // MPEG Layer II
+    CODEC_MP3,          // MPEG Layer III
     CODEC_COUNT,
 };
 

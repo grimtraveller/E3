@@ -8,7 +8,7 @@
 #include <stdio.h>
 
 #include <boost/smart_ptr.hpp>
-#include <mad.h>
+//#include <mad.h>
 
 #include <IntegerTypes.h>
 #include <AudioFile.h>
@@ -30,7 +30,7 @@ public:
     void close();
     bool isOpened() const                               { return handle_ != NULL; }
     
-    std::string getVersionString() const                { return mad_version; }
+    std::string getVersionString() const;
     static bool isFormatSupported(const FormatInfo& format, const CodecInfo& codec, int sampleRate=0, int numChannels=1);
 
 protected:

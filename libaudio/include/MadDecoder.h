@@ -13,6 +13,7 @@
 
 #include <IntegerTypes.h>
 #include <AudioBuffer.h>
+#include <AudioFormat.h>
 
 
 
@@ -21,13 +22,15 @@ class MadDecoder
 public:
     MadDecoder();
 
-    size_t start(FILE* handle, size_t bufferSize);
+    size_t start(FILE* handle);
     void finish();
     size_t decode(size_t len, AudioBuffer* buffer);
 
     int getSampleRate() const   { return madSynth_.pcm.samplerate; }
-    //int64 getNumFrames() const  { return (int64)(durationMsec_ * .001 * (int64)getSampleRate() + .5); }
     int getNumChannels() const;
+
+    CodecId getCodecId() const;
+    static const char* getVersionString();
 
 protected:
     int64 getDurationMs(unsigned char* buffer, size_t bufferSize);
@@ -42,6 +45,7 @@ protected:
     int currentFrame_;
     int numMpegFrames_;
     int64 durationMsec_;
+    bool initialized_;
 
     struct mad_stream madStream_;
     struct mad_frame  madFrame_;

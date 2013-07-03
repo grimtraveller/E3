@@ -23,23 +23,22 @@
 
 MadDecoder::MadDecoder() : 
     handle_(NULL),
-    bufferSize_(0),
+    bufferSize_(8192),
     currentFrame_(0),
-    numMpegFrames_(0)
+    numMpegFrames_(0),
+    initialized_(false)
 {}
 
 
-size_t MadDecoder::start(FILE* handle, size_t bufferSize)
+size_t MadDecoder::start(FILE* handle)
 {
-    handle_     = handle;
-    bufferSize_ = bufferSize;
+    handle_ = handle;
 
-    decodeBuffer_.clear();
-    decodeBuffer_.resize(bufferSize);
-    ASSERT(decodeBuffer_.getSize() == bufferSize);
+    decodeBuffer_.resize(bufferSize_, false);
+    ASSERT(decodeBuffer_.getSize() == bufferSize_);
     unsigned char* buffer = decodeBuffer_.getHead();
 
-    int64 durationMsec = getDurationMs(buffer, bufferSize); 
+    int64 durationMsec = getDurationMs(buffer, bufferSize_); 
 
     mad_stream_init(&madStream_);
     mad_frame_init(&madFrame_);
@@ -49,8 +48,8 @@ size_t MadDecoder::start(FILE* handle, size_t bufferSize)
     // Decode at least one valid frame to find out the input format.
     // The decoded frame will be saved off so that it can be processed later.
     //
-    size_t bytesRead = fread(buffer, (size_t)1, bufferSize, handle_);
-    if (bytesRead != bufferSize && ferror(handle_))
+    size_t bytesRead = fread(buffer, (size_t)1, bufferSize_, handle_);
+    if (bytesRead != bufferSize_ && ferror(handle_))
         EXCEPTION(std::exception, "%s", strerror(errno));
     mad_stream_buffer(&madStream_, buffer, bytesRead);
 
@@ -87,6 +86,7 @@ size_t MadDecoder::start(FILE* handle, size_t bufferSize)
     //unsigned int precision_ = 16;
     currentFrame_  = 0;
     numMpegFrames_ = 0;
+    initialized_   = true;
 
     return (size_t)(durationMsec * .001 * getSampleRate() + .5);  // number of sample frames
 }
@@ -98,12 +98,16 @@ void MadDecoder::finish()
   mad_synth_finish(&madSynth_);
   mad_frame_finish(&madFrame_);
   mad_stream_finish(&madStream_);
+
+  initialized_ = false;
 }
 
 
 
 int MadDecoder::getNumChannels() const
 {
+    if(initialized_ == false) EXCEPTION(std::exception, "MadDecoder not initialized");
+    
     switch(madFrame_.header.mode)
     {
     case MAD_MODE_SINGLE_CHANNEL:
@@ -114,6 +118,21 @@ int MadDecoder::getNumChannels() const
         break;
     default:
         EXCEPTION(std::exception, "Unknown channel mode");
+    }
+}
+
+
+
+CodecId MadDecoder::getCodecId() const
+{
+    if(initialized_ == false) EXCEPTION(std::exception, "MadDecoder not initialized");
+    
+    switch(madFrame_.header.layer)
+    {
+    case MAD_LAYER_I:   return CODEC_MP1;
+    case MAD_LAYER_II:  return CODEC_MP2;
+    case MAD_LAYER_III: return CODEC_MP3;
+    default: EXCEPTION(std::exception, "Unknown MPEG layer");
     }
 }
 
@@ -130,7 +149,7 @@ int64 MadDecoder::getDurationMs(unsigned char* buffer, size_t bufferSize)
     bool vbr = false;
     size_t tagsize = 0;
     size_t consumed = 0; 
-    size_t frames = 0;
+    size_t numFrames = 0;
     size_t initialBitrate = 0; 
 
 
@@ -181,7 +200,7 @@ int64 MadDecoder::getDurationMs(unsigned char* buffer, size_t bufferSize)
             mad_timer_add(&time, madHeader.duration);
             consumed += madStream.next_frame - madStream.this_frame;
 
-            if (!frames) {
+            if (numFrames == 0) {
                 initialBitrate = madHeader.bitrate;
 
                 // Get the precise frame count from the XING header if present 
@@ -192,9 +211,9 @@ int64 MadDecoder::getDurationMs(unsigned char* buffer, size_t bufferSize)
                         break;
                     }
                 }
-                if ((frames = xingFrames(madStream.anc_ptr, madStream.anc_bitlen))) 
+                if ((numFrames = xingFrames(madStream.anc_ptr, madStream.anc_bitlen))) 
                 {
-                    mad_timer_multiply(&time, (signed long)frames);
+                    mad_timer_multiply(&time, (signed long)numFrames);
                     break;
                 }
             }
@@ -202,8 +221,8 @@ int64 MadDecoder::getDurationMs(unsigned char* buffer, size_t bufferSize)
                 vbr |= madHeader.bitrate != initialBitrate;
             }
 
-            // If not VBR, we can time just a few frames then extrapolate 
-            if (++frames == 25 && !vbr) 
+            // If not VBR, we can time just a few frames then extrapolate (not exact!)
+            if (++numFrames == 25 && !vbr) 
             {
                 struct stat st;
                 fstat(fileno(handle_), &st);
@@ -423,4 +442,11 @@ void MadDecoder::timerMultiply(mad_timer_t* t, double d)
 }
 
 
+//-------------------------------------------------------------------------
+// static members
+//-------------------------------------------------------------------------
 
+const char* MadDecoder::getVersionString()
+{
+    return mad_version;
+}

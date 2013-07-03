@@ -41,8 +41,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetExt>.lib</TargetExt>
-    <LibraryPath>D:\Dev\C++\Lib\boost\boost_1_49_0\lib\i386;$(LibraryPath)</LibraryPath>
-    <IncludePath>D:\Dev\C++\Lib\boost\boost_1_49_0;D:\Dev\C++\Lib\E3\libcommon\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Dev\C++\Lib\boost\boost_1_54_0\lib\i386;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Dev\C++\Lib\boost\boost_1_54_0;D:\Dev\C++\Lib\E3\libcommon\include;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -50,8 +50,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetExt>.lib</TargetExt>
-    <LibraryPath>D:\Dev\C++\Lib\boost\boost_1_49_0\lib\i386;$(LibraryPath)</LibraryPath>
-    <IncludePath>D:\Dev\C++\Lib\boost\boost_1_49_0;D:\Dev\C++\Lib\E3\libcommon\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Dev\C++\Lib\boost\boost_1_54_0;D:\Dev\C++\Lib\E3\libcommon\include;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
