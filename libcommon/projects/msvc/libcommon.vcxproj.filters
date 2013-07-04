@@ -19,10 +19,7 @@
     <ClInclude Include="..\..\include\TimeHelper.h">
       <Filter>Quelldateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Macros.h">
-      <Filter>Quelldateien</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Globals.h">
+    <ClInclude Include="..\..\include\LibCommon.h">
       <Filter>Quelldateien</Filter>
     </ClInclude>
   </ItemGroup>

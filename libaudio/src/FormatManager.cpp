@@ -5,7 +5,7 @@
 
 #include <algorithm>
 
-#include <Macros.h>
+#include <LibCommon.h>
 
 #include <FormatManager.h>
 #include <MultiFormatAudioFile.h>

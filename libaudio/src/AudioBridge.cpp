@@ -1,7 +1,7 @@
 
 #include <boost/foreach.hpp>
 
-#include <Macros.h>
+#include <LibCommon.h>
 
 #include <AudioBridge.h>
 #include <AudioDevice.h>

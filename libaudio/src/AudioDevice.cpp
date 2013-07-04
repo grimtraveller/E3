@@ -1,8 +1,8 @@
 
 #include <algorithm>
 
+#include <LibCommon.h>
 #include <IntegerTypes.h>
-#include <Macros.h>
 
 #include <AudioDevice.h>
 

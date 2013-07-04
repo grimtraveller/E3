@@ -5,10 +5,12 @@
 
 #pragma once
 
-//#include <boost/filesystem.hpp>
+#include <boost/filesystem.hpp>
+typedef boost::filesystem::path Path;
+
 #include <boost/smart_ptr.hpp>
 
-#include <Globals.h>
+#include <LibCommon.h>
 #include <IntegerTypes.h>
 #include <AudioFormat.h>
 

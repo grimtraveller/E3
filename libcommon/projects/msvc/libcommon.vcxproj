@@ -89,9 +89,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\EnumHelper.h" />
-    <ClInclude Include="..\..\include\Globals.h" />
+    <ClInclude Include="..\..\include\LibCommon.h" />
     <ClInclude Include="..\..\include\IntegerTypes.h" />
-    <ClInclude Include="..\..\include\Macros.h" />
     <ClInclude Include="..\..\include\TimeHelper.h" />
     <ClInclude Include="..\..\include\Trace.h" />
   </ItemGroup>

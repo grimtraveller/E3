@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <Macros.h>
+#include <LibCommon.h>
 
 
 template < class T >

@@ -1,7 +1,28 @@
-﻿
+
 #pragma once
 
-#include <stdexcept>
+//-------------------------------------------------
+// General 
+//-------------------------------------------------
+
+#include <iostream>
+
+using std::cout;
+using std::cerr;
+using std::endl;
+
+#ifdef max
+#undef max
+#endif
+
+#ifdef min
+#undef min
+#endif
+
+
+//----------------------------------------------------------------
+// Macro definitions
+//----------------------------------------------------------------
 
 // Strips the path off the __FILE__ macro
 //
@@ -11,6 +32,8 @@
 : __FILE__ \
 )
 
+
+#include <stdexcept>
 
 // Throws an exception of the given type.
 // The text for the exception can be formatted in printf-style.
@@ -58,4 +81,6 @@
 // Returns the name of the given type as string.
 //
 #define TYPENAME( t ) #t		
+
+
 
