@@ -91,10 +91,12 @@
     <ClInclude Include="..\..\include\EnumHelper.h" />
     <ClInclude Include="..\..\include\LibCommon.h" />
     <ClInclude Include="..\..\include\IntegerTypes.h" />
+    <ClInclude Include="..\..\include\Logging.h" />
     <ClInclude Include="..\..\include\TimeHelper.h" />
     <ClInclude Include="..\..\include\Trace.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\Logging.cpp" />
     <ClCompile Include="..\..\src\TimeHelper.cpp" />
     <ClCompile Include="..\..\src\Trace.cpp" />
   </ItemGroup>

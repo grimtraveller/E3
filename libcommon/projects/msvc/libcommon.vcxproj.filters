@@ -22,12 +22,18 @@
     <ClInclude Include="..\..\include\LibCommon.h">
       <Filter>Quelldateien</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Logging.h">
+      <Filter>Quelldateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Trace.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\TimeHelper.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Logging.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
