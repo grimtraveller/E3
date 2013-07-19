@@ -12,7 +12,7 @@
 #include <vector>
 #include <boost/unordered_map.hpp>
 #include <boost/filesystem.hpp>
-#include <boost/smart_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <sndfile.h>  // libsndfile
 

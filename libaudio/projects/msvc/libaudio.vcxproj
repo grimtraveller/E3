@@ -29,6 +29,7 @@
     <ClCompile Include="..\..\src\AudioBuffer.cpp" />
     <ClCompile Include="..\..\src\AudioDevice.cpp" />
     <ClCompile Include="..\..\src\AudioFile.cpp" />
+    <ClCompile Include="..\..\src\CPUProfiler.cpp" />
     <ClCompile Include="..\..\src\FormatManager.cpp" />
     <ClCompile Include="..\..\src\InstrumentChunk.cpp" />
     <ClCompile Include="..\..\src\MadDecoder.cpp" />

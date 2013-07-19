@@ -8,7 +8,6 @@
 #include <stdio.h>
 
 #include <boost/smart_ptr.hpp>
-//#include <mad.h>
 
 #include <IntegerTypes.h>
 #include <AudioFile.h>

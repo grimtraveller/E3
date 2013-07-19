@@ -1,19 +1,13 @@
 
+
+//------------------------------------------------------------
+// CPUProfiler.h
+//
+// Measures CPU performance for audio applications
+//------------------------------------------------------------
+
+
 #pragma once
-
-
-
-class Clock
-{
-public:
-    Clock();
-    double getTime() const;
-
-private:
-    bool usePerformanceCounter_;
-    double secondsPerTick_;
-};
-
 
 
 class CPUProfiler

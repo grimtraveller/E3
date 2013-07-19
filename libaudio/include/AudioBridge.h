@@ -9,7 +9,7 @@
 
 #include <string>
 #include <vector>
-#include <boost/smart_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <portaudio.h>
 

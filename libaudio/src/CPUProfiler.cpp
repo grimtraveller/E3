@@ -1,43 +1,9 @@
 
 
-#include <windows.h>
-#include <mmsystem.h> // for QueryPerformanceCounter
-
-#include <core/CPUProfiler.h>
+#include <Clock.h>
+#include <CPUProfiler.h>
 
 
-
-//---------------------------------------------------
-// class Clock
-//---------------------------------------------------
-
-Clock::Clock() :
-    usePerformanceCounter_(false),
-    secondsPerTick_(0)
-{
-    LARGE_INTEGER ticksPerSecond;
-
-    if(QueryPerformanceFrequency( &ticksPerSecond ) != 0)
-    {
-        usePerformanceCounter_ = true;
-        secondsPerTick_ = 1.0 / (double)ticksPerSecond.QuadPart;
-    }
-}
-
-
-
-double Clock::getTime() const
-{
-    if(usePerformanceCounter_)
-    {
-        LARGE_INTEGER time;
-        QueryPerformanceCounter(&time);
-        return time.QuadPart * secondsPerTick_;
-    }
-    else {
-        return timeGetTime() * .001;
-    }
-}
 
 
 CPUProfiler::CPUProfiler() : 
@@ -50,7 +16,7 @@ CPUProfiler::CPUProfiler() :
 
 void CPUProfiler::begin()
 {
-    startTime_ = clock_.getTime();
+    startTime_ = clock_.getSeconds();
 }
 
 
@@ -59,7 +25,7 @@ void CPUProfiler::end(int framesProcessed)
 {
     if( framesProcessed > 0 )
     {
-        double endTime              = clock_.getTime();
+        double endTime              = clock_.getSeconds();
         double secondsFor100Percent = framesProcessed * samplePeriod_;
         double measuredLoad         = (endTime - startTime_) / secondsFor100Percent;
 
