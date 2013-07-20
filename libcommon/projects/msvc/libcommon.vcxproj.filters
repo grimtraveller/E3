@@ -5,6 +5,10 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;h</Extensions>
     </Filter>
+    <Filter Include="Quelldateien\Log">
+      <UniqueIdentifier>{a414af43-41a9-4aca-8990-45c72fe98779}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;h</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\EnumHelper.h">
@@ -16,16 +20,25 @@
     <ClInclude Include="..\..\include\TimeHelper.h">
       <Filter>Quelldateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\LibCommon.h">
-      <Filter>Quelldateien</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Logging.h">
       <Filter>Quelldateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Logger.h">
+    <ClInclude Include="..\..\include\Clock.h">
       <Filter>Quelldateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Clock.h">
+    <ClInclude Include="..\..\include\Log\Log.h">
+      <Filter>Quelldateien\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\log\Format.h">
+      <Filter>Quelldateien\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\log\Attributes.h">
+      <Filter>Quelldateien\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\log\Sinks.h">
+      <Filter>Quelldateien\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CommonMacros.h">
       <Filter>Quelldateien</Filter>
     </ClInclude>
   </ItemGroup>
@@ -36,11 +49,20 @@
     <ClCompile Include="..\..\src\Logging.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Logger.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Clock.cpp">
       <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Log\Log.cpp">
+      <Filter>Quelldateien\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\log\Format.cpp">
+      <Filter>Quelldateien\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\log\Attributes.cpp">
+      <Filter>Quelldateien\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\log\Sinks.cpp">
+      <Filter>Quelldateien\Log</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

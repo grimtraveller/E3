@@ -1,7 +1,7 @@
 
 #include <algorithm>
 
-#include <LibCommon.h>
+#include <CommonMacros.h>
 #include <IntegerTypes.h>
 
 #include <AudioDevice.h>

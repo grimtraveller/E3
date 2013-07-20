@@ -10,7 +10,7 @@ typedef boost::filesystem::path Path;
 
 #include <boost/smart_ptr.hpp>
 
-#include <LibCommon.h>
+#include <CommonMacros.h>
 #include <IntegerTypes.h>
 #include <AudioFormat.h>
 
