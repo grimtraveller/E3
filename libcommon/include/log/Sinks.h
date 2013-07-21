@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <string>
 #include <fstream>
 
 #include <log/Format.h>
@@ -19,20 +20,15 @@ namespace e3 { namespace log {
 class Sink
 {
 public:
-    Sink() {}
+    Sink(const std::string& formatString="%Message%%LineBreak%");       // TODO find better place for default
     virtual ~Sink() {}
+
     virtual void output(const std::string& msg) = 0;
 
-    //virtual const std::string getFormat() const  // TODO: return reference not value
-    //{ 
-    //    return format_.empty() ? LogCore::getDefaultFormat() : format_; 
-    //}
     virtual void setFormat(const std::string& formatString);
     virtual const Format& getFormat() const { return format_; }
 
 protected:
-    //std::string format_;
-    //void parseFormat(const std::string& format);
     Format format_;
 };
 
@@ -57,12 +53,16 @@ class FileSink : public Sink
 {
 public:
     FileSink(const std::string& filename);
-    ~FileSink();
+    ~FileSink() {}
 
     void output(const std::string& msg);
 
 protected:
-    std::ofstream ofs_;
+    std::ofstream ofs_;     
+
+    // non-copyable
+    FileSink(const FileSink& other) {}
+    FileSink& operator=(const FileSink&) { return *this; }
 };
 
 

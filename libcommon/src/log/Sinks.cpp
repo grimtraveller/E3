@@ -20,6 +20,13 @@ namespace e3 { namespace log {
 // class Sink
 //----------------------------------------------------------
 //
+Sink::Sink(const std::string& formatString)
+{
+    setFormat(formatString);
+}
+
+
+
 void Sink::setFormat(const std::string& formatString)  
 { 
     format_.parse(formatString);
@@ -27,6 +34,10 @@ void Sink::setFormat(const std::string& formatString)
 
 
 
+//----------------------------------------------------------
+// class StreamSink
+//----------------------------------------------------------
+//
 StreamSink::StreamSink(std::ostream* stream, bool isOwner) :
     stream_(stream),
     isOwner_(isOwner)
@@ -56,16 +67,11 @@ void StreamSink::output(const std::string& msg)
 // class FileSink
 //----------------------------------------------------------
 //
-FileSink::FileSink(const std::string& filename)
+FileSink::FileSink(const std::string& filename) : Sink()
 {
-    ofs_.open(filename, std::ofstream::out | std::ofstream::app);
+    ofs_.open(filename.c_str(), std::ofstream::out | std::ofstream::app);
 }
 
-
-FileSink::~FileSink()
-{
-    ofs_.close();
-}
 
 
 void FileSink::output(const std::string& msg)

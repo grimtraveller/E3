@@ -44,15 +44,22 @@ bool Format::parse(const std::string& formatString)
     typedef qi::rule<IteratorT, char()> CharRuleT;
         
     CharRuleT escChar   = '\\' >> qi::char_("\\%"); 
-    StringRuleT tag     = '%' >> +(qi::char_ - '%') >> '%';
+    StringRuleT tag     = '%' > +(qi::char_ - '%') > '%';
     StringRuleT text    = +(escChar | ~qi::char_('%'));
     StringRuleT grammar = *(text[textHandler] | tag[tagHandler]); 
 
-    bool result = qi::parse(formatString.begin(), formatString.end(), grammar);
+    try {
+        bool result = qi::parse(formatString.begin(), formatString.end(), grammar);
+        return result;
+    }
+    catch(const qi::expectation_failure<IteratorT>& e) {
+        //EXCEPTION(std::exception, "Error parsing log format: missing closing %-tag");
+        throw std::exception("Error parsing log format: unbalanced %-tags");
+    }
         
     //std::cout << "parseTags " << (result?"successful":"failed") << std::endl;
     //std::cout << std::endl;
-    return result;
+    //return result;
 }
 
 }} // namespace e3::log

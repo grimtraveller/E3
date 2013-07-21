@@ -6,37 +6,38 @@
 #pragma once
 
 #include <string>
+#include <sstream>
+
 #include <CommonMacros.h>
+#include <log/Record.h>
 
 namespace e3 { namespace log {
 	
 //-----------------------------------------------------------------------------------------
 // class Attribute
-// Interface for log attributes. These are configurable token to be inserted to LogRecords
+// Interface for log attributes. 
+// Log attributes are configurable tokens that will be inserted to the output
+// of a log record.
 //-----------------------------------------------------------------------------------------
 //
 class Attribute
 {
 public:
-    class Impl
-    {
-    public:
-        virtual const std::string& getString(const LogRecord& record) const = 0;
-    };
+    virtual ~Attribute() {}
 
-    Attribute() : impl_(NULL)           {}
-    Attribute(Impl* impl) : impl_(impl) {}
-    ~Attribute()                        {}
+    virtual void realize(const Record& record, std::ostringstream& os) const = 0;
+};
 
-    virtual const std::string& getString() const
-    { 
-        ASSERT(impl_);
-        return impl_->getString(); 
-    }
 
-    //friend std::ostream& operator<< (std::ostream& out, Attribute& attr);
-protected:
-    Impl* impl_;  // TODO: make this intrusive_ptr
+
+//-----------------------------------------------------------------------------------------
+// class MessageAttribute
+//-----------------------------------------------------------------------------------------
+//
+class MessageAttribute : public Attribute
+{
+public:
+    void realize(const Record& record, std::ostringstream& os) const;
 };
 
 
@@ -45,6 +46,25 @@ protected:
 // class InternalAttribute
 //-----------------------------------------------------------------------------------------
 //
+class InternalAttribute : public Attribute
+{
+public:
+    enum Type { 
+        Message, 
+        FileName, 
+        FunctionName, 
+        LineNum, 
+        LineBreak, 
+        Tab 
+    };
+    InternalAttribute(Type type) : Attribute(), type_(type) {}
+
+    void realize(const Record& record, std::ostringstream& os) const;
+
+protected:
+    Type type_;
+};
+
 
 
 //-----------------------------------------------------------------------------------------
@@ -55,19 +75,14 @@ class TextAttribute : public Attribute
 {
 public:
     TextAttribute(const std::string& text="") : 
-        Attribute(new Impl(text)) 
+        Attribute(),
+        text_(text)
     {}
 
-protected:
-    class Impl : public Attribute::Impl
-    {
-    public:
-        Impl(const std::string& text) : text_(text)                  {}
-        const std::string& getString(const LogRecord& record) const  { return text_; }
+    void realize(const Record& record, std::ostringstream& os) const;
 
-    protected:
-        std::string text_;
-    };
+private:
+    std::string text_;
 };
 
 

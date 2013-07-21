@@ -96,6 +96,7 @@
     <ClInclude Include="..\..\include\log\Attributes.h" />
     <ClInclude Include="..\..\include\log\Format.h" />
     <ClInclude Include="..\..\include\Log\Log.h" />
+    <ClInclude Include="..\..\include\log\Record.h" />
     <ClInclude Include="..\..\include\log\Sinks.h" />
     <ClInclude Include="..\..\include\TimeHelper.h" />
   </ItemGroup>
@@ -107,6 +108,7 @@
     <ClCompile Include="..\..\src\log\Attributes.cpp" />
     <ClCompile Include="..\..\src\log\Format.cpp" />
     <ClCompile Include="..\..\src\Log\Log.cpp" />
+    <ClCompile Include="..\..\src\log\Record.cpp" />
     <ClCompile Include="..\..\src\log\Sinks.cpp" />
     <ClCompile Include="..\..\src\TimeHelper.cpp" />
   </ItemGroup>

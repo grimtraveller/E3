@@ -7,17 +7,44 @@
 
 namespace e3 { namespace log {
 
-//----------------------------------------------------------
-// class Attribute
-//----------------------------------------------------------
+
+//-----------------------------------------------------------------------------------------
+// class MessageAttribute
+//-----------------------------------------------------------------------------------------
 //
-//std::ostream& operator<< (std::ostream& out, LogAttribute& attr) // TODO: why?
-//{
-//    out << attr.getString();
-//    return out;
-//}
+void MessageAttribute::realize(const Record& record, std::ostringstream& os) const
+{
+    os << record.getMessage();
+}
 
 
+//-----------------------------------------------------------------------------------------
+// class InternalAttribute
+//-----------------------------------------------------------------------------------------
+//
+void InternalAttribute::realize(const Record& record, std::ostringstream& os) const
+{
+    switch(type_) {
+    case Message:      os << record.getMessage(); break;
+    case FileName:     os << record.getFile(); break;
+    case FunctionName: os << record.getFunction(); break;
+    case LineNum:      os << record.getLine(); break;
+    case LineBreak:    os << std::endl; break;
+    case Tab:          os << '\t'; break;
+
+    default: ASSERT(false);
+    }
+}
+
+
+//-----------------------------------------------------------------------------------------
+// class TextAttribute
+//-----------------------------------------------------------------------------------------
+//
+void TextAttribute::realize(const Record& record, std::ostringstream& os) const
+{
+    os << text_;
+}
 
 	
 	

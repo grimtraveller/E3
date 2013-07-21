@@ -5,6 +5,8 @@
 #include <sstream>
 #include <fstream>
 
+#include <boost/make_shared.hpp>
+
 
 #ifdef __OS_WINDOWS__
 	#include <windows.h>
@@ -20,30 +22,6 @@ Logger defaultLogger;
 
 
 
-//--------------------------------------------------
-// class LogRecord
-//--------------------------------------------------
-//
-LogRecord::LogRecord(const char* file, const char* function, int line) :
-    file_(file),
-    function_(function),
-    line_(line)
-{
-    //std::cout << "FILENAME="<<filename<<std::endl;
-    //std::cout << "FUNCTIONNAME="<<functionname<<std::endl; 
-    //std::cout << "LINENUMBER="<<linenumber<<std::endl;
-}
-
-
-LogRecord::~LogRecord()
-{
-    stream_.flush();
-    Logger* logger = LogCore::instance().getLogger();
-    logger->output(*this);
-}
-
-
-
 //----------------------------------------------------------
 // class Logger
 //----------------------------------------------------------
@@ -55,12 +33,13 @@ Logger::Logger(LogLevel level) :
 
 Logger::~Logger()
 {
-    for(unsigned i=0; i<sinks_.size(); i++) 
-    { 
-        delete sinks_[i];
-        sinks_[i] = NULL;
-    }
+    //for(unsigned i=0; i<sinks_.size(); i++) 
+    //{ 
+    //    delete sinks_[i];
+    //    sinks_[i] = NULL;
+    //}
     sinks_.clear();
+    attributes_.clear();
 }
 
 
@@ -70,22 +49,35 @@ void Logger::initDefault()
     setLevel(Verbose1);
     
     attributes_.clear();
-    addAttribute("MESSAGE", TextAttribute());
-    addAttribute("LINEBREAK", TextAttribute("\n"));
-    //addAttribute("FILE", InternalAttribute<std::string>(internalAttribute_));
+    addAttribute("Message",      boost::make_shared<InternalAttribute>(InternalAttribute(InternalAttribute::Message)));
+    addAttribute("FileName",     boost::make_shared<InternalAttribute>(InternalAttribute(InternalAttribute::FileName)));
+    addAttribute("FunctionName", boost::make_shared<InternalAttribute>(InternalAttribute(InternalAttribute::FunctionName)));
+    addAttribute("LineNum",      boost::make_shared<InternalAttribute>(InternalAttribute(InternalAttribute::LineNum)));
+    addAttribute("LineBreak",    boost::make_shared<InternalAttribute>(InternalAttribute(InternalAttribute::LineBreak)));
+    addAttribute("Tab",          boost::make_shared<InternalAttribute>(InternalAttribute(InternalAttribute::Tab)));
+
+    //addAttribute("LINEBREAK", boost::make_shared<TextAttribute>(TextAttribute("\n")));
 }
 
 
 
-void Logger::addAttribute(const std::string& name, const Attribute& attribute)
+void Logger::addSink(Sink* sink)                    
+{ 
+    ASSERT(sink); 
+    sinks_.push_back(sink); 
+}
+
+
+
+void Logger::addAttribute(const std::string& name, boost::shared_ptr<Attribute> attribute)
 {
-    const std::string key = "%" + name + "%"; 
-    attributes_.insert( AttributeMap::value_type( key, attribute ));
+    ASSERT(attribute.get());
+    attributes_.insert( AttributeMap::value_type( name, attribute ));
 }
 
 
 
-void Logger::output(const LogRecord& record)
+void Logger::output(const Record& record)
 {
     for(unsigned i=0; i<sinks_.size(); i++)
     {
@@ -102,10 +94,15 @@ void Logger::output(const LogRecord& record)
             switch(type) 
             {
             case Format::Tag:
-                if(data == "MESSAGE")
-                    os << record.getMessage();
-                else if(data == "LINEBREAK")
-                    os << std::endl;
+                {
+                    AttributeMap::const_iterator it = attributes_.find(data);
+                    if(it != attributes_.end())
+                    {
+                        Attribute* attribute = (*it).second.get();
+                        ASSERT(attribute);
+                        attribute->realize(record, os);
+                    }
+                }
                 break;
 
             case Format::Text:
@@ -115,16 +112,6 @@ void Logger::output(const LogRecord& record)
             default: ASSERT(false);
             }
         }
-
-        //AttributeMap::const_iterator it = attributes_.begin();
-        //for(; it!=attributes_.end(); ++it)
-        //{
-        //    const std::string& name  = it->first;
-        //    const LogAttribute& attr = it->second;
-
-        //    const std::string& value = (name != "%MESSAGE%") ? attr.getString() : msg;
-        //    //format = boost::algorithm::replace_all_copy(format, name, value);
-        //}
         sink->output(os.str());
     }
 }
