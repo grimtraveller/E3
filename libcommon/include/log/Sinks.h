@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <boost/utility.hpp>
+
 #include <string>
 #include <fstream>
 
@@ -49,7 +51,9 @@ protected:
 
 
 
-class FileSink : public Sink
+class FileSink : 
+    public Sink, 
+    private boost::noncopyable   // non-copyable, since the file resource may not be copied
 {
 public:
     FileSink(const std::string& filename);
@@ -60,9 +64,9 @@ public:
 protected:
     std::ofstream ofs_;     
 
-    // non-copyable
-    FileSink(const FileSink& other) {}
-    FileSink& operator=(const FileSink&) { return *this; }
+    // non-copyable, since std::ofstream is not copyable
+    //FileSink(const FileSink& other) {}
+    //FileSink& operator=(const FileSink&) { return *this; }
 };
 
 

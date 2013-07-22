@@ -3,9 +3,20 @@
 // Attributes.cpp
 //--------------------------------------------------------
 
+#include <boost/functional/hash.hpp>
 #include <log/Attributes.h>
 
 namespace e3 { namespace log {
+
+
+size_t Attribute::hash(const std::string& s)
+{
+    boost::hash<std::string> hashFunction;
+    std::size_t result = hashFunction(s);
+
+    return result;
+}
+
 
 
 //-----------------------------------------------------------------------------------------

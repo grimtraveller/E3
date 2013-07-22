@@ -7,9 +7,13 @@
 
 #include <string>
 #include <sstream>
+#include <map>
+
+#include <boost/shared_ptr.hpp>
 
 #include <CommonMacros.h>
 #include <log/Record.h>
+
 
 namespace e3 { namespace log {
 	
@@ -26,7 +30,13 @@ public:
     virtual ~Attribute() {}
 
     virtual void realize(const Record& record, std::ostringstream& os) const = 0;
+
+    static size_t hash(const std::string& s);
 };
+
+
+typedef boost::shared_ptr<Attribute> AttributePtr;
+typedef std::map<size_t, AttributePtr > AttributeMap;
 
 
 

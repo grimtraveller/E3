@@ -8,8 +8,12 @@
 #pragma once
 
 #include <string>
-#include <vector>
-#include <utility>      // std::pair
+#include <sstream>
+
+//#include <boost/utility.hpp>  // boost::noncopyable
+
+#include <log/Record.h>
+#include <log/Attributes.h>
 
 
 namespace e3 { namespace log {
@@ -17,22 +21,19 @@ namespace e3 { namespace log {
 class Format
 {
 public:
-    enum TokenType { Tag, Text };
-    typedef std::pair<TokenType, std::string> Token;
-private:
-    typedef std::vector<Token> TokenVector;
-public:
-    typedef TokenVector::const_iterator TokenIterator;
+    Format();
+    Format(const Format& other);
+    Format& operator=(const Format& other);
+    ~Format();
 
     bool parse(const std::string& formatString);
-
-    TokenIterator begin() const  { return tokens_.begin(); }
-    TokenIterator end() const    { return tokens_.end(); }
+    void realize(const AttributeMap& attributes,  const Record& record, std::ostringstream& os) const;
 
 protected:
-    TokenVector tokens_;
+    friend struct TokenHandler;  // callback for the parser
 
-    friend struct TokenHandler;
+    class Impl;
+    Impl* pimpl_;
 };
 
 }}  // namespace e3::log

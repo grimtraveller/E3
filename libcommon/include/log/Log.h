@@ -1,11 +1,10 @@
 
 #pragma once
 
-#include <sstream>      
-#include <vector>
-#include <map>
+//#include <sstream>      
+#include <set>
 
-#include <boost/shared_ptr.hpp>
+#include <boost/utility.hpp>  // boost::noncopyable
 
 #include <CommonMacros.h>
 #include <log/Attributes.h>
@@ -14,7 +13,7 @@
 
 namespace e3 { namespace log {
 
-enum LogLevel
+enum Priority
 {
     Verbose1,
     Verbose2,
@@ -34,31 +33,34 @@ class Sink;
 class Logger
 {
 public:
-    Logger(LogLevel level=Verbose1);
+    Logger(Priority p=Verbose1);
     ~Logger();
 
     void initDefault();
     void output(const Record& record);
 
-    void setLevel(LogLevel level)               { level_ = level; }
-    LogLevel getLevel() const                   { return level_; }
+    void setPriority(Priority p)               { priority_ = p; }
+    Priority getPriority() const               { return priority_; }
 
-    void addSink(Sink* sink);
-    // TODO: removeSink
+    bool addSink(Sink* sink);
+    void removeSink(Sink* sink, bool removeAll=false);
 
     void addAttribute(const std::string& name, boost::shared_ptr<Attribute> attribute);
     // TODO: removeAttribute
+    // TODO: use hash_map or integer-id
+    // TODO: force uniqueness of attributes in the map
+    // TODO: any kind of feedback when a format contains an unknown attribute
 
 public:
     static void trace(const char* f, ...);      // TODO: remove from class
 
 protected:
-    LogLevel level_;
+    Priority priority_;
 
-    typedef std::vector<Sink*> SinkVector;
-    SinkVector sinks_;
+    typedef std::set<Sink*> SinkSet;
+    SinkSet sinks_;
 
-    typedef std::map<const std::string, boost::shared_ptr<Attribute> > AttributeMap;
+    //typedef std::map<const std::string, boost::shared_ptr<Attribute> > AttributeMap;
     AttributeMap attributes_;
 };
 
@@ -66,26 +68,22 @@ protected:
 
 
 //-----------------------------------------------------------------------------------------
+// class Core
 // Singleton class to manage Loggers
+//
+// TODO: manage multiple loggers
 //-----------------------------------------------------------------------------------------
-class LogCore
+class Core : private boost::noncopyable
 {
-    DECLARE_SINGLETON( LogCore )
+    DECLARE_SINGLETON( Core )
 
 public:
     Logger* getLogger() const;
     void setLogger(Logger* logger)  { logger_ = logger; }
 
-    static const std::string getDefaultFormat()    { return "%Message%%LineBreak%"; }
-
 private:
     Logger* logger_;
 };
-
-
-
-
-
 
 extern Logger defaultLogger;
 
@@ -98,8 +96,8 @@ extern Logger defaultLogger;
 #define TRACE( ... ) e3::log::Logger::trace( ##__VA_ARGS__ )
 
 
-#define LOG(level)                          \
-    if(level < e3::log::LogCore::instance().getLogger()->getLevel()) ;        \
+#define LOG(priority)                                                           \
+    if(priority < e3::log::Core::instance().getLogger()->getPriority()) ;    \
     else e3::log::Record(__FILE_ONLY__, __FUNCTION__, __LINE__).getStream()    
 
 

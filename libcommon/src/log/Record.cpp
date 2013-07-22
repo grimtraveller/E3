@@ -26,7 +26,7 @@ Record::Record(const char* file, const char* function, int line) :
 Record::~Record()
 {
     stream_.flush();
-    Logger* logger = LogCore::instance().getLogger();
+    Logger* logger = Core::instance().getLogger();
     logger->output(*this);
 }
 

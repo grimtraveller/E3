@@ -26,19 +26,21 @@ Logger defaultLogger;
 // class Logger
 //----------------------------------------------------------
 //
-Logger::Logger(LogLevel level) : 
-    level_(level)
+Logger::Logger(Priority p) : 
+    priority_(p)
 {}
 
 
 Logger::~Logger()
 {
+    removeSink(NULL, true);
     //for(unsigned i=0; i<sinks_.size(); i++) 
     //{ 
     //    delete sinks_[i];
     //    sinks_[i] = NULL;
     //}
-    sinks_.clear();
+    //sinks_.clear();
+
     attributes_.clear();
 }
 
@@ -46,7 +48,7 @@ Logger::~Logger()
 
 void Logger::initDefault()
 {
-    setLevel(Verbose1);
+    setPriority(Verbose1);
     
     attributes_.clear();
     addAttribute("Message",      boost::make_shared<InternalAttribute>(InternalAttribute(InternalAttribute::Message)));
@@ -61,10 +63,27 @@ void Logger::initDefault()
 
 
 
-void Logger::addSink(Sink* sink)                    
+bool Logger::addSink(Sink* sink)                    
 { 
     ASSERT(sink); 
-    sinks_.push_back(sink); 
+    std::pair<SinkSet::iterator, bool> result = sinks_.insert(sink);
+
+    return result.second;
+}
+
+
+
+void Logger::removeSink(Sink* sink, bool removeAll)
+{
+    for(SinkSet::iterator it = sinks_.begin(); it!=sinks_.end();)
+    {
+        Sink* current = *it;
+        if(current == sink || removeAll) {
+            delete current;
+            it = sinks_.erase(it);
+        }
+        else ++it;
+    }
 }
 
 
@@ -72,46 +91,49 @@ void Logger::addSink(Sink* sink)
 void Logger::addAttribute(const std::string& name, boost::shared_ptr<Attribute> attribute)
 {
     ASSERT(attribute.get());
-    attributes_.insert( AttributeMap::value_type( name, attribute ));
+    size_t hash = Attribute::hash(name);
+    attributes_.insert( AttributeMap::value_type( hash, attribute ));
 }
 
 
 
 void Logger::output(const Record& record)
 {
-    for(unsigned i=0; i<sinks_.size(); i++)
+    for(SinkSet::iterator itSinks = sinks_.begin(); itSinks!=sinks_.end(); ++itSinks)
     {
-        Sink* sink = sinks_[i];
-        const Format& format = sink->getFormat();
-        
         std::ostringstream os;
-        for(Format::TokenIterator it=format.begin(); it!=format.end(); ++it)
-        {
-            const Format::Token& token = *it;
-            Format::TokenType type     = token.first;
-            std::string data           = token.second;
 
-            switch(type) 
-            {
-            case Format::Tag:
-                {
-                    AttributeMap::const_iterator it = attributes_.find(data);
-                    if(it != attributes_.end())
-                    {
-                        Attribute* attribute = (*it).second.get();
-                        ASSERT(attribute);
-                        attribute->realize(record, os);
-                    }
-                }
-                break;
+        Sink* sink = *itSinks;
+        const Format& format = sink->getFormat();
+        format.realize(attributes_, record, os);
+        
+        //for(Format::TokenIterator itFormat=format.begin(); itFormat!=format.end(); ++itFormat)
+        //{
+        //    const Format::Token& token = *itFormat;
+        //    Format::TokenType type     = token.first;
+        //    std::string data           = token.second;
 
-            case Format::Text:
-                os << data;
-                break;
+        //    switch(type) 
+        //    {
+        //    case Format::Tag:
+        //        {
+        //            AttributeMap::const_iterator pos = attributes_.find(data);
+        //            if(pos != attributes_.end())
+        //            {
+        //                Attribute* attribute = (*pos).second.get();
+        //                ASSERT(attribute);
+        //                attribute->realize(record, os);
+        //            }
+        //        }
+        //        break;
 
-            default: ASSERT(false);
-            }
-        }
+        //    case Format::Text:
+        //        os << data;
+        //        break;
+
+        //    default: ASSERT(false);
+        //    }
+        //}
         sink->output(os.str());
     }
 }
@@ -137,18 +159,16 @@ void Logger::trace(const char* f, ...)
 
 
 //--------------------------------------------------
-// class LogCore
+// class Core
 //--------------------------------------------------
 //
-LogCore::LogCore() :
+Core::Core() :
     logger_(NULL)
 {}
 
 
-LogCore::LogCore( const LogCore& ) {}
 
-
-Logger* LogCore::getLogger() const       
+Logger* Core::getLogger() const       
 { 
     if(logger_ == NULL) 
         return &defaultLogger;
