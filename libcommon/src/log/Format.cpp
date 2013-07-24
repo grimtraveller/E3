@@ -32,7 +32,7 @@ public:
 
 
     bool parse(const std::string& formatString);
-    void realize(const AttributeMap& attributes,  const Record& record, std::ostringstream& os) const;
+    void realize(const AttributeMap& attributes,  const RecordBase& record, std::ostringstream& os) const;
 
 protected:
     enum TokenType { Tag, Text };
@@ -106,7 +106,7 @@ bool Format::Impl::parse(const std::string& formatString)
 
 
 
-void Format::Impl::realize(const AttributeMap& attributes, const Record& record, std::ostringstream& os) const
+void Format::Impl::realize(const AttributeMap& attributes, const RecordBase& record, std::ostringstream& os) const
 {
     for(TokenVector::const_iterator itFormat=tokens_.begin(); itFormat!=tokens_.end(); ++itFormat)
     {
@@ -185,7 +185,7 @@ bool Format::parse(const std::string& formatString)
 
 
 
-void Format::realize(const AttributeMap& attributes, const Record& record, std::ostringstream& os) const
+void Format::realize(const AttributeMap& attributes, const RecordBase& record, std::ostringstream& os) const
 { 
     pimpl_->realize(attributes, record, os); 
 }

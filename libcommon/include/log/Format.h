@@ -27,7 +27,7 @@ public:
     ~Format();
 
     bool parse(const std::string& formatString);
-    void realize(const AttributeMap& attributes,  const Record& record, std::ostringstream& os) const;
+    void realize(const AttributeMap& attributes,  const RecordBase& record, std::ostringstream& os) const;
 
 protected:
     friend struct TokenHandler;  // callback for the parser

@@ -29,7 +29,7 @@ class Attribute
 public:
     virtual ~Attribute() {}
 
-    virtual void realize(const Record& record, std::ostringstream& os) const = 0;
+    virtual void realize(const RecordBase& record, std::ostringstream& os) const = 0;
 
     static size_t hash(const std::string& s);
 };
@@ -37,18 +37,6 @@ public:
 
 typedef boost::shared_ptr<Attribute> AttributePtr;
 typedef std::map<size_t, AttributePtr > AttributeMap;
-
-
-
-//-----------------------------------------------------------------------------------------
-// class MessageAttribute
-//-----------------------------------------------------------------------------------------
-//
-class MessageAttribute : public Attribute
-{
-public:
-    void realize(const Record& record, std::ostringstream& os) const;
-};
 
 
 
@@ -61,6 +49,7 @@ class InternalAttribute : public Attribute
 public:
     enum Type { 
         Message, 
+        Priority,
         FileName, 
         FunctionName, 
         LineNum, 
@@ -69,7 +58,7 @@ public:
     };
     InternalAttribute(Type type) : Attribute(), type_(type) {}
 
-    void realize(const Record& record, std::ostringstream& os) const;
+    void realize(const RecordBase& record, std::ostringstream& os) const;
 
 protected:
     Type type_;
@@ -89,7 +78,7 @@ public:
         text_(text)
     {}
 
-    void realize(const Record& record, std::ostringstream& os) const;
+    void realize(const RecordBase& record, std::ostringstream& os) const;
 
 private:
     std::string text_;
@@ -101,11 +90,10 @@ private:
 
 
 // TODO: 
-// file attribute
-// line attribute
 // timeline attribute
 // timestamp attribute
 // counter attribute
+// priority attribute
 
 	
 }} // namespace e3::log

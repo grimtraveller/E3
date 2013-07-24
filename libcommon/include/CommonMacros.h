@@ -88,16 +88,23 @@
 
 // Declares a class as singleton
 //
-#define DECLARE_SINGLETON( TClass )  \
- public:                             \
-    static TClass& instance()        \
-    {                                \
-       static TClass _instance;      \
-       return _instance;             \
-    }                                \
- private:                            \
-    TClass();                        \
-    TClass( const TClass& );
+#define DECLARE_SINGLETON( TClass )     \
+public:                                 \
+    static TClass& instance()           \
+    {                                   \
+        static TClass _instance;        \
+        return _instance;               \
+    }                                   \
+    private:                            \
+        TClass();                       \
+        TClass( const TClass& );
 
 
 
+// Within a class definition declares a test class as friend
+//
+#ifdef UNITTEST
+#define ASSIST_UNIT_TEST( class__ ) friend class class__##Test
+#else
+#define ASSIST_UNIT_TEST( class__ )
+#endif

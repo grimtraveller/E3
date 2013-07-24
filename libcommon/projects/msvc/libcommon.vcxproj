@@ -98,19 +98,22 @@
     <ClInclude Include="..\..\include\Log\Log.h" />
     <ClInclude Include="..\..\include\log\Record.h" />
     <ClInclude Include="..\..\include\log\Sinks.h" />
-    <ClInclude Include="..\..\include\TimeHelper.h" />
+    <ClInclude Include="..\..\include\Utilities.h" />
+    <ClInclude Include="..\..\include\Trace.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Clock.cpp" />
     <ClCompile Include="..\..\src\Logging.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\log\Attributes.cpp" />
     <ClCompile Include="..\..\src\log\Format.cpp" />
     <ClCompile Include="..\..\src\Log\Log.cpp" />
     <ClCompile Include="..\..\src\log\Record.cpp" />
     <ClCompile Include="..\..\src\log\Sinks.cpp" />
-    <ClCompile Include="..\..\src\TimeHelper.cpp" />
+    <ClCompile Include="..\..\src\Utilities.cpp" />
+    <ClCompile Include="..\..\src\Trace.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

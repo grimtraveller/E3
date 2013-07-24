@@ -17,9 +17,6 @@
     <ClInclude Include="..\..\include\IntegerTypes.h">
       <Filter>Quelldateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\TimeHelper.h">
-      <Filter>Quelldateien</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Logging.h">
       <Filter>Quelldateien</Filter>
     </ClInclude>
@@ -44,11 +41,14 @@
     <ClInclude Include="..\..\include\log\Record.h">
       <Filter>Quelldateien\Log</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Trace.h">
+      <Filter>Quelldateien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utilities.h">
+      <Filter>Quelldateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\TimeHelper.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Logging.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -69,6 +69,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\log\Record.cpp">
       <Filter>Quelldateien\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Trace.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utilities.cpp">
+      <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -5,6 +5,8 @@
 
 #include <boost/functional/hash.hpp>
 #include <log/Attributes.h>
+#include <log/Log.h>
+
 
 namespace e3 { namespace log {
 
@@ -20,23 +22,20 @@ size_t Attribute::hash(const std::string& s)
 
 
 //-----------------------------------------------------------------------------------------
-// class MessageAttribute
-//-----------------------------------------------------------------------------------------
-//
-void MessageAttribute::realize(const Record& record, std::ostringstream& os) const
-{
-    os << record.getMessage();
-}
-
-
-//-----------------------------------------------------------------------------------------
 // class InternalAttribute
 //-----------------------------------------------------------------------------------------
 //
-void InternalAttribute::realize(const Record& record, std::ostringstream& os) const
+void InternalAttribute::realize(const RecordBase& record, std::ostringstream& os) const
 {
     switch(type_) {
-    case Message:      os << record.getMessage(); break;
+    case Message:  
+        {
+        std::string msg;
+        record.getMessage(msg);
+        os << msg; 
+        break;
+        }
+    case Priority:     record.getLogger()->priorityToString(os, record.getPriority()); break;
     case FileName:     os << record.getFile(); break;
     case FunctionName: os << record.getFunction(); break;
     case LineNum:      os << record.getLine(); break;
@@ -52,7 +51,7 @@ void InternalAttribute::realize(const Record& record, std::ostringstream& os) co
 // class TextAttribute
 //-----------------------------------------------------------------------------------------
 //
-void TextAttribute::realize(const Record& record, std::ostringstream& os) const
+void TextAttribute::realize(const RecordBase& record, std::ostringstream& os) const
 {
     os << text_;
 }

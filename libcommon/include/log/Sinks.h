@@ -5,10 +5,11 @@
 
 #pragma once
 
-#include <boost/utility.hpp>
-
 #include <string>
 #include <fstream>
+#include <set>
+
+#include <boost/utility.hpp>
 
 #include <log/Format.h>
 
@@ -34,6 +35,7 @@ protected:
     Format format_;
 };
 
+typedef std::set<Sink*> SinkSet;
 
 
 class StreamSink : public Sink
@@ -63,10 +65,6 @@ public:
 
 protected:
     std::ofstream ofs_;     
-
-    // non-copyable, since std::ofstream is not copyable
-    //FileSink(const FileSink& other) {}
-    //FileSink& operator=(const FileSink&) { return *this; }
 };
 
 
@@ -78,6 +76,7 @@ class DebugSink : public Sink
 public:
     void output(const std::string& msg);
 };
+
 #endif // __OS_WINDOWS__
 
 

@@ -58,7 +58,7 @@ void StreamSink::output(const std::string& msg)
 {
     if(stream_) {
         *stream_ << msg;
-        stream_->flush();
+        stream_->flush(); 
     }
 }
 
