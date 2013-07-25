@@ -23,6 +23,37 @@ struct NullSink : public Sink
 };
 
 
+
+enum TestPriority
+{
+    Low,
+    High,
+    Sick
+};
+
+
+
+std::ostringstream& operator<< (std::ostringstream& stream, TestPriority priority)
+{
+    static const char* strings[] =
+    {
+        "Low",
+        "High", 
+        "Sick"
+    };
+
+    if (static_cast< std::size_t >(priority) < sizeof(strings) / sizeof(*strings))
+        stream << strings[priority];
+    else
+        stream << static_cast< int >(priority);
+
+    return stream;
+}
+
+
+
+
+
 bool LogTest::testBasicLogger()
 {
     Priority priority = DEBUG;
@@ -42,18 +73,19 @@ bool LogTest::testBasicLogger()
 }
 
 
+
 bool LogTest::testPriority()
 {
     bool result = true;
 
-    PriorityLogger<> logger(ERR);
+    PriorityLogger<TestPriority> logger(Sick);
     NullSink* sink = new NullSink();
     logger.addSink(sink);
 
-    E3_LOG_PRIO(DEBUG, logger) << "abc";
+    E3_LOG_PRIO(Low, logger) << "abc";
     result &= (sink->bin_.length() == 0);
 
-    E3_LOG_PRIO(ERR, logger) << "abc";
+    E3_LOG_PRIO(Sick, logger) << "abc";
 
     result &= (sink->bin_.length() > 0);    
 

@@ -47,6 +47,9 @@
     <ClInclude Include="..\..\include\Utilities.h">
       <Filter>Quelldateien</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\PreallocatedQueue.h">
+      <Filter>Quelldateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Logging.cpp">

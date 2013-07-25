@@ -100,7 +100,7 @@ protected:
 class PersistentRecord : public RecordBase
 {
 public:
-    //PersistentRecord() : RecordBase() {}
+    PersistentRecord() : RecordBase() {}
     PersistentRecord(const RecordBase& rhs);
 
     const char* getFileName() const             { return strFileName_.c_str(); }
