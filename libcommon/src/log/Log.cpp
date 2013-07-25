@@ -29,7 +29,8 @@ Logger defaultLogger;
 //    priority_ = p;
 //}
 
-Logger::Logger(bool useDefault)
+Logger::Logger(bool useDefault) :
+    lock_(false)
 {
     if(useDefault)
         initDefault();
@@ -46,8 +47,6 @@ Logger::~Logger()
 
 void Logger::initDefault()
 {
-    //setPriority(Verbose1);
-    
     attributes_.clear();
     addAttribute("Message",      boost::make_shared<InternalAttribute>(InternalAttribute(InternalAttribute::Message)));
     addAttribute("Priority",     boost::make_shared<InternalAttribute>(InternalAttribute(InternalAttribute::Priority)));
@@ -153,7 +152,7 @@ void Logger::flush()
 }
 
 
-std::ostringstream& operator<< (std::ostringstream& stream, LogLevel level)
+std::ostringstream& operator<< (std::ostringstream& stream, Priority priority)
 {
     static const char* strings[] =
     {
@@ -168,15 +167,12 @@ std::ostringstream& operator<< (std::ostringstream& stream, LogLevel level)
         "EMERG"  
     };
 
-    if (static_cast< std::size_t >(level) < sizeof(strings) / sizeof(*strings))
-        stream << strings[level];
+    if (static_cast< std::size_t >(priority) < sizeof(strings) / sizeof(*strings))
+        stream << strings[priority];
     else
-        stream << static_cast< int >(level);
+        stream << static_cast< int >(priority);
 
     return stream;
 }
-
-
-
 
 }} // namespace e3::log

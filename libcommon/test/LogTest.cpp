@@ -25,18 +25,17 @@ struct NullSink : public Sink
 
 bool LogTest::testBasicLogger()
 {
-    Priority priority = Verbose1;
-    Logger logger(priority);
+    Priority priority = DEBUG;
+    PriorityLogger<> logger(priority);
     NullSink* sink = new NullSink();
     logger.addSink(sink);
-    Core::instance().setLogger(&logger);
 
     int n = 123;
     std::ostringstream os;
     os << "BasicLoggerTest " << n << std::endl; 
     const std::string& s1 = os.str();          // create a reference string
 
-    LOG(priority) << "BasicLoggerTest " << n;
+    E3_LOG_PRIO(priority, logger) << "BasicLoggerTest " << n;
     const std::string& s2 = sink->bin_;
 
     return s1 == s2;
@@ -47,15 +46,14 @@ bool LogTest::testPriority()
 {
     bool result = true;
 
-    Logger logger(Error);
+    PriorityLogger<> logger(ERR);
     NullSink* sink = new NullSink();
     logger.addSink(sink);
-    Core::instance().setLogger(&logger);
 
-    LOG(Verbose1) << "abc";
+    E3_LOG_PRIO(DEBUG, logger) << "abc";
     result &= (sink->bin_.length() == 0);
 
-    LOG(Error) << "abc";
+    E3_LOG_PRIO(ERR, logger) << "abc";
 
     result &= (sink->bin_.length() > 0);    
 
@@ -76,13 +74,11 @@ bool LogTest::testFileSink()
     }
 
     {
-        Logger logger(Verbose1);
+        PriorityLogger<> logger(DEBUG);
         FileSink* sink = new FileSink(filename);
         logger.addSink(sink);
-        Core::instance().setLogger(&logger);
 
-        LOG(Verbose1) << testString;
-        Core::instance().setLogger(NULL);
+        E3_LOG_PRIO(DEBUG, logger) << testString;
     }
 
     ifs.open(filename, std::ofstream::in);
@@ -112,7 +108,7 @@ bool LogTest::testSinkSet()
     StreamSink* sink1 = new StreamSink(NULL);
     StreamSink* sink2 = new StreamSink(NULL);
     
-    Logger logger;
+    PriorityLogger<> logger(DEBUG);
     const SinkSet& sinks = logger.getSinks();
     
     result &= logger.addSink(sink1);

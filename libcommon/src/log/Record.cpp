@@ -11,34 +11,33 @@
 
 
 namespace e3 { namespace log {
-
-
+    
 
 RecordBase::RecordBase(Logger* logger, int priority) :
     logger_(logger),
     priority_(priority),
-    file_(NULL),
-    function_(NULL),
-    line_(0)
+    fileName_(NULL),
+    functionName_(NULL),
+    lineNum_(0)
     {}
 
 
 
-RecordBase::RecordBase(Logger* logger, int priority, const char* file, const char* function, int line) :
+RecordBase::RecordBase(Logger* logger, int priority, const char* fileName, const char* functionName, int lineNum) :
     logger_(logger),
     priority_(priority),
-    file_(file),
-    function_(function),
-    line_(line)
+    fileName_(fileName),
+    functionName_(functionName),
+    lineNum_(lineNum)
     {}
 
 
 RecordBase::RecordBase(const RecordBase& rhs) :
     logger_(rhs.logger_),
     priority_(rhs.priority_),
-    file_(rhs.file_),
-    function_(rhs.function_),
-    line_(rhs.line_)
+    fileName_(rhs.fileName_),
+    functionName_(rhs.functionName_),
+    lineNum_(rhs.lineNum_)
     {}
 
 
@@ -47,6 +46,14 @@ void RecordBase::push()
 {
     if(logger_) {
         logger_->pushRecord(*this); 
+    }
+}
+
+
+void RecordBase::getPriorityAsString(std::ostringstream& os) const
+{
+    if(logger_) {
+        logger_->priorityToString(os, priority_);
     }
 }
 
@@ -62,25 +69,10 @@ StreamRecord::StreamRecord(Logger* logger, int priority) :
     {}
 
 
-StreamRecord::StreamRecord(Logger* logger, int priority, const char* file, const char* function, int line) :
-    RecordBase(logger, priority, file, function, line)
+StreamRecord::StreamRecord(Logger* logger, int priority, const char* fileName, const char* functionName, int lineNum) :
+    RecordBase(logger, priority, fileName, functionName, lineNum)
     {}
 
-
-
-
-//-----------------------------------------------------------------------------
-// class BufferRecord
-//-----------------------------------------------------------------------------
-//
-//BufferRecord::BufferRecord(Logger* logger, int priority, const char* file, const char* function, int line, const char* fmt, ...) :
-//    RecordBase(logger, priority, file, function, line)
-//{
-//	va_list args;
-//	va_start( args, fmt );
-//	vsprintf( buffer_, fmt, args );
-//    va_end( args );
-//}
 
 
 
@@ -93,18 +85,11 @@ PersistentRecord::PersistentRecord(const RecordBase& rhs) :
 {
     rhs.getMessage(strMessage_);
     
-    if(file_) strFile_         = rhs.getFile();
-    if(function_) strFunction_ = rhs.getFunction();
+    if(fileName_) strFileName_         = rhs.getFileName();
+    if(functionName_) strFunctionName_ = rhs.getFunctionName();
 
-    line_ = rhs.getLine();
+    lineNum_ = rhs.getLineNum();
 }
-
-
-//std::ostringstream& operator<<(std::ostringstream& os, const PersistentRecord& record)
-//{
-//    os << (const_cast<PersistentRecord&>(record)).strMessage_;
-//    return os;
-//}
 
 
 }} // namespace e3::log

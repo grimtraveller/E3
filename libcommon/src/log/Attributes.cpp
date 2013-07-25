@@ -35,10 +35,10 @@ void InternalAttribute::realize(const RecordBase& record, std::ostringstream& os
         os << msg; 
         break;
         }
-    case Priority:     record.getLogger()->priorityToString(os, record.getPriority()); break;
-    case FileName:     os << record.getFile(); break;
-    case FunctionName: os << record.getFunction(); break;
-    case LineNum:      os << record.getLine(); break;
+    case Priority:     record.getPriorityAsString(os); break;
+    case FileName:     os << record.getFileName(); break;
+    case FunctionName: os << record.getFunctionName(); break;
+    case LineNum:      os << record.getLineNum(); break;
     case LineBreak:    os << std::endl; break;
     case Tab:          os << '\t'; break;
 

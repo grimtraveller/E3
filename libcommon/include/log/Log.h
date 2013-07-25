@@ -53,8 +53,6 @@ public:
     bool isLocked() const                       { return lock_; }
     void flush();
 
-    virtual void priorityToString( std::ostringstream& stream, int priority) {}
-
 protected:
     SinkSet sinks_;
     AttributeMap attributes_;
@@ -65,11 +63,14 @@ protected:
     RecordVector records_;
 
     void output(const RecordBase& record);
+
+    friend class RecordBase;
+    virtual void priorityToString( std::ostringstream& stream, int priority) {}
 };
 
 
 
-enum LogLevel
+enum Priority
 {
     NOTSET,
     DEBUG,  // Information useful during development for debugging.
@@ -83,16 +84,16 @@ enum LogLevel
 };
 
 
-std::ostringstream& operator<< (std::ostringstream& stream, LogLevel level);
+std::ostringstream& operator<< (std::ostringstream& stream, Priority);
 
 
-template< typename PriorityT=LogLevel >
+template< typename PriorityT=Priority >
 class PriorityLogger : public Logger
 {
 public:
     typedef PriorityT Priority;
 
-    PriorityLogger(bool useDefault, Priority p) : 
+    PriorityLogger(Priority p, bool useDefault=true) : 
         Logger(useDefault),
         priority_(p)
     {}
@@ -100,15 +101,14 @@ public:
     void setPriority(Priority p)  { priority_ = p; }
     Priority getPriority() const  { return priority_; }
 
+protected:
+    Priority priority_;
 
     void priorityToString( std::ostringstream& os, int priority)
     {
         Priority p = static_cast<Priority>(priority);
         os << p;
     }
-
-protected:
-    Priority priority_;
 };
 
 
