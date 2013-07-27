@@ -47,8 +47,8 @@
     <ClInclude Include="..\..\include\Utilities.h">
       <Filter>Quelldateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\PreallocatedQueue.h">
-      <Filter>Quelldateien</Filter>
+    <ClInclude Include="..\..\include\log\RecordBuffer.h">
+      <Filter>Quelldateien\Log</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

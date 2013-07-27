@@ -97,8 +97,8 @@
     <ClInclude Include="..\..\include\log\Format.h" />
     <ClInclude Include="..\..\include\Log\Log.h" />
     <ClInclude Include="..\..\include\log\Record.h" />
+    <ClInclude Include="..\..\include\log\RecordBuffer.h" />
     <ClInclude Include="..\..\include\log\Sinks.h" />
-    <ClInclude Include="..\..\include\PreallocatedQueue.h" />
     <ClInclude Include="..\..\include\Utilities.h" />
     <ClInclude Include="..\..\include\Trace.h" />
   </ItemGroup>

@@ -22,9 +22,8 @@ class Logger;
 class RecordBase
 {
 public:
-    RecordBase();
     RecordBase(const RecordBase& rhs);
-    RecordBase(Logger* logger, int priority); 
+    RecordBase(Logger* logger=NULL, int priority=0); 
     RecordBase(Logger* logger, int priority, const char* fileName, const char* functionName, int lineNum); 
     virtual ~RecordBase() {}                          
                                                  
@@ -100,13 +99,35 @@ protected:
 class PersistentRecord : public RecordBase
 {
 public:
-    PersistentRecord() : RecordBase() {}
+    PersistentRecord() : RecordBase() 
+    {
+        strMessage_.reserve(255);
+        strFileName_.reserve(16);
+        strFunctionName_.reserve(16);
+    }
     PersistentRecord(const RecordBase& rhs);
+    PersistentRecord(const PersistentRecord& rhs);
 
     const char* getFileName() const             { return strFileName_.c_str(); }
     const char* getFunctionName() const         { return strFunctionName_.c_str(); }
 
     void getMessage(std::string& result) const  { result = strMessage_; }
+
+    PersistentRecord& operator=(const RecordBase& rhs)
+    {
+        //if(this == &rhs)
+        //   return *this;
+
+        rhs.getMessage(strMessage_);
+    
+        const char* pFileName = rhs.getFileName();
+        const char* pFunctionName = rhs.getFunctionName();
+
+        if(pFileName) strFileName_         = pFileName;
+        if(pFunctionName) strFunctionName_ = pFunctionName;
+
+        return *this;
+    }
 
 protected:
     std::string strMessage_;

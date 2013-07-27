@@ -87,8 +87,23 @@ PersistentRecord::PersistentRecord(const RecordBase& rhs) :
     
     if(fileName_) strFileName_         = rhs.getFileName();
     if(functionName_) strFunctionName_ = rhs.getFunctionName();
+}
 
-    lineNum_ = rhs.getLineNum();
+
+PersistentRecord::PersistentRecord(const PersistentRecord& rhs) :
+    RecordBase(rhs)
+{
+#ifdef _DEBUG
+    //throw std::exception("should never be called");
+#endif
+
+    strMessage_.reserve(255);
+    strFileName_.reserve(16);
+    strFunctionName_.reserve(16);
+    
+    strMessage_      = rhs.strMessage_;
+    strFileName_     = rhs.strFileName_;
+    strFunctionName_ = rhs.strFunctionName_;
 }
 
 

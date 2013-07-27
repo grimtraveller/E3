@@ -11,11 +11,7 @@
 #include <set>
 #include <vector>
 
-//#include <boost/utility.hpp>  // boost::noncopyable
-//#include <boost/make_shared.hpp>
-
-
-//#include <CommonMacros.h>
+#include <log/RecordBuffer.h>
 #include <log/Attributes.h>
 #include <log/Sinks.h>
 #include <log/Record.h>
@@ -32,7 +28,7 @@ namespace e3 { namespace log {
 class Logger
 {
 public:
-    Logger(bool useDefault=true);
+    Logger(bool useDefault=true, size_t bufferSize=10);
 
     virtual ~Logger();
 
@@ -53,14 +49,18 @@ public:
     bool isLocked() const                       { return lock_; }
     void flush();
 
+    void resizeBuffer(size_t size)              { buffer_.resize(size); }
+    void clearBuffer()                          { buffer_.clear(); }
+    void setOverflowPolicy(OverflowPolicy p)    { buffer_.setOverflowPolicy(p); }
+
 protected:
     SinkSet sinks_;
     AttributeMap attributes_;
 
     bool lock_;
 
-    typedef std::vector<PersistentRecord> RecordVector;
-    RecordVector records_;
+    typedef RecordBuffer<PersistentRecord> RecordBufferT;
+    RecordBufferT buffer_;
 
     void output(const RecordBase& record);
 

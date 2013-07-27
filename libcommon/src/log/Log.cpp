@@ -20,18 +20,12 @@ Logger defaultLogger;
 // class Logger
 //----------------------------------------------------------
 //
-//Logger::Logger(Priority p, bool useDefault) : 
-//    priority_(p)
-//{
-//    if(useDefault)
-//        initDefault();
-//
-//    priority_ = p;
-//}
-
-Logger::Logger(bool useDefault) :
+Logger::Logger(bool useDefault, size_t bufferSize) :
     lock_(false)
 {
+    buffer_.resize(bufferSize);
+    //records_.reserve(bufferSize); 
+    
     if(useDefault)
         initDefault();
 }
@@ -119,8 +113,10 @@ void Logger::pushRecord(const RecordBase& record)
 {
     if(lock_)
     {
-        PersistentRecord persistentRecord(record);
-        records_.push_back(persistentRecord);
+        //records_.emplace_back(record);
+        PersistentRecord& p = buffer_.getElementAtWritePosition();
+        p = record;
+        buffer_.push(p);
     }
     else 
         output(record);
@@ -142,14 +138,16 @@ void Logger::output(const RecordBase& record)
 }
 
 
+
 void Logger::flush()
 {
-    for(RecordVector::iterator it=records_.begin(); it!=records_.end(); ++it)
+    while(buffer_.empty() == false)
     {
-        output(*it);
+        const PersistentRecord& r = buffer_.pop();
+        output(r);
     }
-    records_.clear();
 }
+
 
 
 std::ostringstream& operator<< (std::ostringstream& stream, Priority priority)

@@ -22,20 +22,6 @@ public:
 };
 
 
-//--------------------------------------------------------
-// class PreallocatedQueueTest
-//--------------------------------------------------------
-//
-class PreallocatedQueueTest: public ::testing::Test 
-{ 
-public: 
-    bool testAll();
-};
-
-
-
-
-
 }} // namespace e3::common
 
 
