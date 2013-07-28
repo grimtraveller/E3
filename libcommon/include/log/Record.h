@@ -69,7 +69,7 @@ protected:
 // class BufferRecord
 //-----------------------------------------------------------------------------
 //
-template<unsigned int N>
+template<size_t bufferSize>
 class BufferRecord : public RecordBase, public boost::noncopyable
 {
 public:
@@ -78,7 +78,7 @@ public:
     {
 	    va_list args;
 	    va_start( args, fmt );
-	    vsnprintf( buffer_, N, fmt, args );
+	    vsnprintf( buffer_, bufferSize, fmt, args );
         va_end( args );
     }
 
@@ -87,7 +87,7 @@ public:
     void getMessage(std::string& result) const  { result = buffer_; }
 
 protected:
-    char buffer_[N];
+    char buffer_[bufferSize];
 };
 
 
