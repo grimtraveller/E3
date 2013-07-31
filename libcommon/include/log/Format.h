@@ -22,8 +22,8 @@ class Format
 {
 public:
     Format();
-    Format(const Format& other);
-    Format& operator=(const Format& other);
+    Format(const Format& rhs);
+    Format& operator=(const Format& rhs);
     ~Format();
 
     bool parse(const std::string& formatString);

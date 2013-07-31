@@ -27,8 +27,8 @@ public:
     friend class Format;
 
     Impl() {}
-    Impl(const Impl& other) { tokens_ = other.tokens_; }
-    Impl(Impl* other)       { tokens_ = other->tokens_; }
+    Impl(const Impl& rhs) : tokens_(rhs.tokens_) {}
+    Impl(Impl* rhs)       : tokens_(rhs->tokens_) {}
 
 
     bool parse(const std::string& formatString);
@@ -155,17 +155,21 @@ Format::Format() : pimpl_(NULL)
 
 
 
-Format::Format(const Format& other) : pimpl_(NULL)
+Format::Format(const Format& rhs) : pimpl_(NULL)
 {
-    pimpl_ = new Impl(other.pimpl_);
+    pimpl_ = new Impl(rhs.pimpl_);
 }
 
 
 
-Format& Format::operator=(const Format& other)
+Format& Format::operator=(const Format& rhs)
 {
+    if(this == &rhs) {
+        return *this;
+    }
+
     delete pimpl_;
-    pimpl_ = new Impl(other.pimpl_);
+    pimpl_ = new Impl(rhs.pimpl_);
 
     return *this;
 }
