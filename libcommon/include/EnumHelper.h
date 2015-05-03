@@ -51,7 +51,7 @@ public:
 //----------------------------------------------------------------------------------
 // class EnumNames
 //
-// Maps enum values to strings. Furthermore a description can be assigned 
+// Maps enum values to string names. Additionally a description can be assigned 
 // to each value.
 //----------------------------------------------------------------------------------
 

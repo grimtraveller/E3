@@ -1,6 +1,6 @@
 
 //---------------------------------------------------
-// Wrapper for linsndfile
+// Wrapper for libnsndfile
 //
 // http://mega-nerd.com/libsndfile/api.html
 //---------------------------------------------------
@@ -23,56 +23,58 @@
 #include "AudioFormat.h"
 
 
-class AudioBuffer;
-class InstrumentChunk;
+namespace e3 {
 
-//--------------------------------------------
-// class MultiFormatAudioFile
-//--------------------------------------------
+    class AudioBuffer;
+    class InstrumentChunk;
 
-class MultiFormatAudioFile : public AudioFile
-{
-public:
-    MultiFormatAudioFile();
-    ~MultiFormatAudioFile();
+    //--------------------------------------------
+    // class MultiFormatAudioFile
+    //--------------------------------------------
 
-    void open(const Path& filename, FileOpenMode mode);
-    void load(AudioBuffer* buffer);
-    void store(const AudioBuffer* buffer);
-    void close();
-	int64 seek(int64 frame);
-    
-    int64 readShort(short* buffer, int64 num)       { return sf_read_short(handle_, buffer, num); }
-    int64 readInt(int* buffer, int64 num)           { return sf_read_int(handle_, buffer, num); }
-    int64 readFloat(float* buffer, int64 num)       { return sf_read_float(handle_, buffer, num); }
-    int64 readDouble(double* buffer, int64 num)     { return sf_read_double(handle_, buffer, num); }
+    class MultiFormatAudioFile : public AudioFile
+    {
+    public:
+        MultiFormatAudioFile();
+        ~MultiFormatAudioFile();
 
-    int64 writeShort(short* buffer, int64 num)      { return sf_write_short(handle_, buffer, num); }
-    int64 writeInt(int* buffer, int64 num)          { return sf_write_int(handle_, buffer, num); }
-    int64 writeFloat(float* buffer, int64 num)      { return sf_write_float(handle_, buffer, num); }
-    int64 writeDouble(double* buffer, int64 num)    { return sf_write_double(handle_, buffer, num); }
+        void open(const Path& filename, FileOpenMode mode);
+        void load(AudioBuffer* buffer);
+        void store(const AudioBuffer* buffer);
+        void close();
+        int64 seek(int64 frame);
 
-    SNDFILE* getHandle() const                      { return handle_; }
-    bool isOpened() const                           { return handle_ != NULL; }
-    int getNumSections() const                      { return numSections_; }
+        int64 readShort(short* buffer, int64 num)       { return sf_read_short(handle_, buffer, num); }
+        int64 readInt(int* buffer, int64 num)           { return sf_read_int(handle_, buffer, num); }
+        int64 readFloat(float* buffer, int64 num)       { return sf_read_float(handle_, buffer, num); }
+        int64 readDouble(double* buffer, int64 num)     { return sf_read_double(handle_, buffer, num); }
 
-    static std::string getVersionString();
-    static bool isFormatSupported(const FormatInfo& format, const CodecInfo& codec, int sampleRate=0, int numChannels=1);
+        int64 writeShort(short* buffer, int64 num)      { return sf_write_short(handle_, buffer, num); }
+        int64 writeInt(int* buffer, int64 num)          { return sf_write_int(handle_, buffer, num); }
+        int64 writeFloat(float* buffer, int64 num)      { return sf_write_float(handle_, buffer, num); }
+        int64 writeDouble(double* buffer, int64 num)    { return sf_write_double(handle_, buffer, num); }
 
-protected:
-    int makeSfFormat() const      { return format_.idPrivate_ & SF_FORMAT_TYPEMASK | codec_.idPrivate_; }
-    void loadInstrumentChunk();
-    void storeInstrumentChunk();
+        SNDFILE* getHandle() const                      { return handle_; }
+        bool isOpened() const                           { return handle_ != NULL; }
+        int getNumSections() const                      { return numSections_; }
 
-	int	numSections_;
-    SNDFILE* handle_;
+        static std::string getVersionString();
+        static bool isFormatSupported(const FormatInfo& format, const CodecInfo& codec, int sampleRate = 0, int numChannels = 1);
 
-    friend class FormatManager;
-    static void initFormatInfos(FormatInfoVector& infos);
-    static void initCodecInfos(CodecInfoVector& infos);
-};
+    protected:
+        int makeSfFormat() const      { return format_.idPrivate_ & SF_FORMAT_TYPEMASK | codec_.idPrivate_; }
+        void loadInstrumentChunk();
+        void storeInstrumentChunk();
 
-typedef boost::shared_ptr<MultiFormatAudioFile> MultiFormatAudioFilePtr;
+        int	numSections_;
+        SNDFILE* handle_;
 
+        friend class FormatManager;
+        static void initFormatInfos(FormatInfoVector& infos);
+        static void initCodecInfos(CodecInfoVector& infos);
+    };
 
+    typedef boost::shared_ptr<MultiFormatAudioFile> MultiFormatAudioFilePtr;
+
+} // namespace e3
 
