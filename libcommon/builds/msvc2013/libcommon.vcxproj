@@ -98,7 +98,7 @@
     <ClInclude Include="..\..\include\e3_Exception.h" />
     <ClInclude Include="..\..\include\e3_Math.h" />
     <ClInclude Include="..\..\include\e3_Profiler.h" />
-    <ClInclude Include="..\..\include\EnumHelper.h" />
+    <ClInclude Include="..\..\include\e3_EnumHelper.h" />
     <ClInclude Include="..\..\include\e3_CommonMacros.h" />
     <ClInclude Include="..\..\include\e3_Utilities.h" />
     <ClInclude Include="..\..\include\e3_Trace.h" />

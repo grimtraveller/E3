@@ -7,9 +7,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\EnumHelper.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\e3_Profiler.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -29,6 +26,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\e3_Math.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\e3_EnumHelper.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
